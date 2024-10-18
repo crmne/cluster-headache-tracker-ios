@@ -5,13 +5,15 @@ let rootURL = URL(string: "https://clusterheadachetracker.com")!
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    
+    let homeURL = URL(string: "\(rootURL.absoluteString)/headache_logs")!
 
     lazy var localPathConfigURL: URL = {
         Bundle.main.url(forResource: "ios_v1", withExtension: "json")!
     }()
 
     lazy var remotePathConfigURL: URL = {
-        URL(string: "\(rootURL)/configurations/ios_v1.json")!
+        URL(string: "\(rootURL.absoluteString)/configurations/ios_v1.json")!
     }()
 
     lazy var pathConfiguration: PathConfiguration = {
@@ -30,6 +32,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = navigator.rootViewController
         window?.makeKeyAndVisible()
-        navigator.route(rootURL)
+        navigator.route(homeURL)
     }
 }
