@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		DB8561302CC2883A003309C3 /* HotwireNative in Frameworks */ = {isa = PBXBuildFile; productRef = DB85612F2CC2883A003309C3 /* HotwireNative */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		DB8561112CC28607003309C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -58,6 +62,11 @@
 			path = "Cluster Headache TrackerUITests";
 			sourceTree = "<group>";
 		};
+		DB8561392CC28B73003309C3 /* configurations */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = configurations;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB8561302CC2883A003309C3 /* HotwireNative in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +98,7 @@
 		DB8560F12CC28605003309C3 = {
 			isa = PBXGroup;
 			children = (
+				DB8561392CC28B73003309C3 /* configurations */,
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
 				DB8561132CC28607003309C3 /* Cluster Headache TrackerTests */,
 				DB85611D2CC28607003309C3 /* Cluster Headache TrackerUITests */,
@@ -122,9 +133,11 @@
 			);
 			fileSystemSynchronizedGroups = (
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
+				DB8561392CC28B73003309C3 /* configurations */,
 			);
 			name = "Cluster Headache Tracker";
 			packageProductDependencies = (
+				DB85612F2CC2883A003309C3 /* HotwireNative */,
 			);
 			productName = "Cluster Headache Tracker";
 			productReference = DB8560FA2CC28605003309C3 /* Cluster Headache Tracker.app */;
@@ -208,6 +221,9 @@
 			);
 			mainGroup = DB8560F12CC28605003309C3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				DB85612E2CC2883A003309C3 /* XCRemoteSwiftPackageReference "hotwire-native-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DB8560FB2CC28605003309C3 /* Products */;
 			projectDirPath = "";
@@ -569,6 +585,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DB85612E2CC2883A003309C3 /* XCRemoteSwiftPackageReference "hotwire-native-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hotwired/hotwire-native-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DB85612F2CC2883A003309C3 /* HotwireNative */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB85612E2CC2883A003309C3 /* XCRemoteSwiftPackageReference "hotwire-native-ios" */;
+			productName = HotwireNative;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DB8560F22CC28605003309C3 /* Project object */;
 }
