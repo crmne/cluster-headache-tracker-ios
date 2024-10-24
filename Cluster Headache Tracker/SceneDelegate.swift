@@ -1,7 +1,7 @@
 import HotwireNative
 import UIKit
 
-let rootURL = URL(string: "https://clusterheadachetracker.com")!
+let rootURL = URL(string: "http://Carmines-MacBook-Air.local:3000")!
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -24,7 +24,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }()
 
     lazy var navigator: Navigator = {
-        Navigator(pathConfiguration: pathConfiguration)
+        let nav = Navigator(pathConfiguration: pathConfiguration)
+        nav.delegate = self
+        return nav
     }()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -32,6 +34,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = navigator.rootViewController
         window?.makeKeyAndVisible()
+        navigator.rootViewController.setNavigationBarHidden(true, animated: true)
+        navigator.modalRootViewController.setNavigationBarHidden(true, animated: true)
+        
+        // Set the window background color to match the nav bar
+        window?.backgroundColor = UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1) // #4f46e5
+        
         navigator.route(homeURL)
+    }
+}
+
+extension SceneDelegate: NavigatorDelegate {
+    func navigator(_ navigator: Navigator, didReceiveServerRedirect response: URLResponse) {
+        // Handle redirects by routing to the new URL
+        if let url = response.url {
+            navigator.route(url)
+        }
     }
 }
