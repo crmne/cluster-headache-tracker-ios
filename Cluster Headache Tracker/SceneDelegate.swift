@@ -1,7 +1,7 @@
 import HotwireNative
 import UIKit
 
-let rootURL = URL(string: "http://Carmines-MacBook-Air.local:3000")!
+let rootURL = URL(string: "https://clusterheadachetracker.com")!
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
