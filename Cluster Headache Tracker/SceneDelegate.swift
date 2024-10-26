@@ -37,9 +37,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         navigator.rootViewController.setNavigationBarHidden(true, animated: true)
         navigator.modalRootViewController.setNavigationBarHidden(true, animated: true)
         
-        // Set the window background color to match the nav bar
-        window?.backgroundColor = UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1) // #4f46e5
-        
         navigator.route(homeURL)
     }
 }
