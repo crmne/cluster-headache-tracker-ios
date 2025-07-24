@@ -6,7 +6,8 @@
         "/headache_logs$",
         "/charts$",
         "/settings$",
-        "/feedback$"
+        "/feedback$",
+        "/headache_logs/new$"
       ],
       "properties": {
         "context": "default",
@@ -15,7 +16,6 @@
     },
     {
       "patterns": [
-        "/headache_logs/new$",
         "/headache_logs/.*/edit$"
       ],
       "properties": {

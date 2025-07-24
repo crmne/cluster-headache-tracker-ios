@@ -4,15 +4,15 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Load the path configuration
-        let baseURL = URL(string: "https://clusterheadachetracker.com")!
+        // Load the path configuration - only use local file
         Hotwire.loadPathConfiguration(from: [
-            .file(Bundle.main.url(forResource: "ios_v1", withExtension: "json")!),
-            .server(baseURL.appendingPathComponent("configurations/ios_v1.json"))
+            .file(Bundle.main.url(forResource: "ios_v1", withExtension: "json")!)
         ])
         
-        // Set custom user agent if needed
-        Hotwire.config.applicationUserAgentPrefix = "ClusterHeadacheTracker;"
+        // Set custom user agent to include Turbo Native and version for detection
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
+        let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown"
+        Hotwire.config.applicationUserAgentPrefix = "Turbo Native; ClusterHeadacheTracker/\(appVersion).\(buildNumber);"
         
         return true
     }
