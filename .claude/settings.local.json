@@ -8,7 +8,15 @@
       "Bash(xcrun simctl install:*)",
       "Bash(xcrun simctl launch:*)",
       "Bash(open:*)",
-      "Bash(xcrun simctl terminate:*)"
+      "Bash(xcrun simctl terminate:*)",
+      "Bash(xcrun simctl list:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(bundle show:*)",
+      "Bash(rm:*)",
+      "Bash(mv:*)",
+      "Bash(touch:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

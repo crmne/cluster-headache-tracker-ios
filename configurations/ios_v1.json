@@ -6,8 +6,7 @@
         "/headache_logs$",
         "/charts$",
         "/settings$",
-        "/feedback$",
-        "/headache_logs/new$"
+        "/feedback$"
       ],
       "properties": {
         "context": "default",
@@ -16,11 +15,33 @@
     },
     {
       "patterns": [
+        "/headache_logs/new$",
         "/headache_logs/.*/edit$"
       ],
       "properties": {
         "context": "modal",
-        "pull_to_refresh_enabled": false
+        "pull_to_refresh_enabled": true,
+        "presentation": "default",
+        "modal_style": "pageSheet",
+        "modal_dismiss_gesture_enabled": true
+      }
+    },
+    {
+      "patterns": [
+        "/users/sign_in$",
+        "/users/sign_up$",
+        "/users/password/new$",
+        "/users/password$",
+        "/login$",
+        "/signup$",
+        "/register$"
+      ],
+      "properties": {
+        "context": "modal",
+        "pull_to_refresh_enabled": false,
+        "presentation": "default",
+        "modal_style": "pageSheet",
+        "modal_dismiss_gesture_enabled": false
       }
     }
   ]

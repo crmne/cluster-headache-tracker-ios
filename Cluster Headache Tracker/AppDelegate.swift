@@ -1,9 +1,51 @@
 import HotwireNative
 import UIKit
+import WebKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        configureAppearance()
+        configureHotwire()
+        return true
+    }
+    
+    private func configureAppearance() {
+        // Make navigation and tab bars opaque
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        
+        // Primary color from Rails app (#4f46e5)
+        navBarAppearance.backgroundColor = UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1.0)
+        
+        // White title text
+        navBarAppearance.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 18, weight: .bold)
+        ]
+        navBarAppearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor.white
+        ]
+        
+        // Configure button appearance
+        let buttonAppearance = UIBarButtonItemAppearance()
+        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navBarAppearance.buttonAppearance = buttonAppearance
+        
+        // Apply to all navigation bars
+        UINavigationBar.appearance().standardAppearance = navBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        UINavigationBar.appearance().compactAppearance = navBarAppearance
+        UINavigationBar.appearance().tintColor = .white
+        
+        // Configure tab bar appearance
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    }
+    
+    private func configureHotwire() {
         // Load the path configuration - only use local file
         Hotwire.loadPathConfiguration(from: [
             .file(Bundle.main.url(forResource: "ios_v1", withExtension: "json")!)
@@ -14,7 +56,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown"
         Hotwire.config.applicationUserAgentPrefix = "Turbo Native; ClusterHeadacheTracker/\(appVersion).\(buildNumber);"
         
-        return true
+        // Register bridge components
+        Hotwire.registerBridgeComponents([
+            ShareComponent.self,
+            ButtonComponent.self
+        ])
+        
+        // Set configuration options
+        Hotwire.config.backButtonDisplayMode = .minimal
+        Hotwire.config.showDoneButtonOnModals = true
     }
 
     // MARK: UISceneSession Lifecycle

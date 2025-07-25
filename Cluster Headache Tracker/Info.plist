@@ -14,9 +14,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>Default Configuration</string>
 					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-					<key>UISceneStoryboardFile</key>
-					<string>Main</string>
+					<string>$(PRODUCT_MODULE_NAME).SceneController</string>
 				</dict>
 			</array>
 		</dict>
@@ -25,7 +23,7 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>192.168.8.231</key>
+			<key>192.168.8.220</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
