@@ -10,8 +10,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    // Make navigation and tab bars opaque.
     private func configureAppearance() {
-        // Make navigation and tab bars opaque
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithOpaqueBackground()
         
@@ -43,10 +43,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarAppearance.configureWithOpaqueBackground()
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        
+        // Set tab bar colors to match Rails app
+        UITabBar.appearance().tintColor = UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1.0) // Primary color
     }
     
     private func configureHotwire() {
-        // Load the path configuration - only use local file
+        // Load the path configuration
         Hotwire.loadPathConfiguration(from: [
             .file(Bundle.main.url(forResource: "ios_v1", withExtension: "json")!)
         ])
@@ -65,6 +68,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set configuration options
         Hotwire.config.backButtonDisplayMode = .minimal
         Hotwire.config.showDoneButtonOnModals = true
+        Hotwire.config.defaultViewController = { url in
+            SafeAreaWebViewController(url: url)
+        }
+#if DEBUG
+        Hotwire.config.debugLoggingEnabled = true
+#endif
     }
 
     // MARK: UISceneSession Lifecycle

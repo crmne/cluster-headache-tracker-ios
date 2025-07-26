@@ -13,7 +13,10 @@ final class SceneController: UIResponder {
     
     private func promptForAuthentication() {
         let authURL = rootURL.appendingPathComponent("/users/sign_in")
-        tabBarController.activeNavigator.route(authURL)
+        
+        // Use the active navigator's modal presentation instead
+        // This will respect the path configuration for modal context
+        tabBarController.activeNavigator.route(authURL, options: VisitOptions(action: .advance))
     }
 }
 
@@ -25,29 +28,19 @@ extension SceneController: UIWindowSceneDelegate {
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
+        tabBarController.delegate = self
         tabBarController.load(HotwireTab.all)
     }
 }
 
-extension VisitProposal {
-    var isPathDirective: Bool {
-        return url.path.contains("_historical_location")
-    }
-}
 
 extension SceneController: NavigatorDelegate {
     func handle(proposal: VisitProposal, from navigator: Navigator) -> ProposalResult {
-        print("🚀 Handle proposal for URL: \(proposal.url)")
-        
         // Check for recede_historical_location and handle modal dismissal
         if proposal.url.path == "/recede_historical_location" {
-            print("🎯 Matched recede_historical_location - dismissing modal")
             DispatchQueue.main.async {
                 if let presented = navigator.rootViewController.presentedViewController {
-                    print("✅ Found modal to dismiss")
                     presented.dismiss(animated: true)
-                } else {
-                    print("❌ No modal found to dismiss")
                 }
             }
             return .reject
@@ -88,3 +81,4 @@ extension SceneController: UITabBarControllerDelegate {
         return true
     }
 }
+
