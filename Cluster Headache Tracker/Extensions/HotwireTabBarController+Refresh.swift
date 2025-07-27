@@ -9,8 +9,8 @@ extension HotwireTabBarController {
         // Get the currently selected index to restore it later
         let currentIndex = selectedIndex
         
-        // Force visit each tab by temporarily selecting it
-        for index in 0..<(viewControllers?.count ?? 0) {
+        // Force visit each tab by temporarily selecting it (starting from index 1)
+        for index in 1..<(viewControllers?.count ?? 0) {
             print("[Auth] Refreshing tab at index \(index)")
             selectedIndex = index
             
