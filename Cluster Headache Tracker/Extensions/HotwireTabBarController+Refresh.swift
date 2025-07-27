@@ -2,7 +2,7 @@ import HotwireNative
 import UIKit
 
 extension HotwireTabBarController {
-    /// Refreshes all tabs to ensure they have the latest authentication state
+    /// Refreshes all tabs after successful sign-in
     func refreshAllTabs() {
         print("[Auth] refreshAllTabs called")
         
@@ -10,6 +10,7 @@ extension HotwireTabBarController {
         let currentIndex = selectedIndex
         
         // Force visit each tab by temporarily selecting it (starting from index 1)
+        // Index 0 is the default tab that's already loaded
         for index in 1..<(viewControllers?.count ?? 0) {
             print("[Auth] Refreshing tab at index \(index)")
             selectedIndex = index

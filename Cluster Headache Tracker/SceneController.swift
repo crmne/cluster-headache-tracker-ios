@@ -12,7 +12,7 @@ final class SceneController: UIResponder {
     var window: UIWindow?
     
     private let rootURL = AppConfig.current
-    private lazy var tabBarController = HotwireTabBarController(navigatorDelegate: self)
+    private var tabBarController: HotwireTabBarController!
     
     // MARK: - Authentication
     
@@ -44,16 +44,37 @@ final class SceneController: UIResponder {
         print("[Auth] Authentication state changed notification received")
         
         DispatchQueue.main.async { [weak self] in
-            print("[Auth] Starting tab refresh")
+            print("[Auth] Starting tab refresh after sign-in")
             self?.tabBarController.refreshAllTabs()
         }
     }
     
     @objc private func handleSignOutRequested() {
-        print("[Auth] Sign out requested, triggering authentication flow")
+        print("[Auth] Sign out requested, clearing all navigators")
         
         DispatchQueue.main.async { [weak self] in
-            self?.promptForAuthentication()
+            guard let self = self else { return }
+            
+            // Clear all navigators and refresh tabs
+            if let viewControllers = self.tabBarController.viewControllers {
+                for (index, _) in viewControllers.enumerated() {
+                    if index < HotwireTab.all.count {
+                        // Select each tab to access its navigator
+                        self.tabBarController.selectedIndex = index
+                        // Clear the navigator
+                        self.tabBarController.activeNavigator.clearAll()
+                        // Route to the tab's URL to refresh it
+                        let tab = HotwireTab.all[index]
+                        self.tabBarController.activeNavigator.route(tab.url, options: VisitOptions(action: .replace))
+                    }
+                }
+            }
+            
+            // Reset to first tab
+            self.tabBarController.selectedIndex = 0
+            
+            // Navigate to sign in
+            self.promptForAuthentication()
         }
     }
     
@@ -67,13 +88,16 @@ extension SceneController: UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
         
         window = UIWindow(windowScene: windowScene)
+        
+        // Create tab bar controller
+        tabBarController = HotwireTabBarController(navigatorDelegate: self)
+        tabBarController.delegate = self
+        tabBarController.load(HotwireTab.all)
+        
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
         setupAuthenticationObserver()
-        
-        tabBarController.delegate = self
-        tabBarController.load(HotwireTab.all)
     }
 }
 
@@ -149,5 +173,6 @@ extension SceneController: UITabBarControllerDelegate {
         
         return true
     }
+    
 }
 
