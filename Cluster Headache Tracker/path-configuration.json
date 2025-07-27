@@ -1,5 +1,7 @@
 {
-  "settings": {},
+  "settings": {
+      "enable_feature_x": true
+  },
   "rules": [
     {
       "patterns": [
@@ -9,8 +11,7 @@
         "/feedback$"
       ],
       "properties": {
-        "context": "default",
-        "presentation": "replace"
+          "context": "default"
       }
     },
     {
@@ -39,9 +40,6 @@
       "properties": {
         "context": "modal",
         "pull_to_refresh_enabled": false,
-        "presentation": "default",
-        "modal_style": "pageSheet",
-        "modal_dismiss_gesture_enabled": false
       }
     }
   ]

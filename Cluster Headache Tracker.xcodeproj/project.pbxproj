@@ -62,11 +62,6 @@
 			path = "Cluster Headache TrackerUITests";
 			sourceTree = "<group>";
 		};
-		DB8561392CC28B73003309C3 /* configurations */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = configurations;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +93,6 @@
 		DB8560F12CC28605003309C3 = {
 			isa = PBXGroup;
 			children = (
-				DB8561392CC28B73003309C3 /* configurations */,
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
 				DB8561132CC28607003309C3 /* Cluster Headache TrackerTests */,
 				DB85611D2CC28607003309C3 /* Cluster Headache TrackerUITests */,
@@ -133,7 +127,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
-				DB8561392CC28B73003309C3 /* configurations */,
 			);
 			name = "Cluster Headache Tracker";
 			packageProductDependencies = (
