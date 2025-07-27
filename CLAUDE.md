@@ -72,3 +72,4 @@ To add new native features accessible from the web app:
 - Minimum iOS: 15.6
 - The app uses Swift Package Manager for dependencies (no CocoaPods/Carthage)
 - Production URL is hardcoded in `AppConfig.swift` for release builds
+- Don't overcomplicate things.

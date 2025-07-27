@@ -5,6 +5,7 @@ import WebKit
 
 extension Notification.Name {
     static let authenticationStateChanged = Notification.Name("authenticationStateChanged")
+    static let signOutRequested = Notification.Name("signOutRequested")
 }
 
 final class SceneController: UIResponder {
@@ -30,16 +31,29 @@ final class SceneController: UIResponder {
             name: .authenticationStateChanged,
             object: nil
         )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleSignOutRequested),
+            name: .signOutRequested,
+            object: nil
+        )
     }
     
     @objc private func handleAuthenticationStateChanged() {
         print("[Auth] Authentication state changed notification received")
         
-        // Increase delay to ensure authentication has fully propagated
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            print("[Auth] Starting tab refresh after delay")
-            // Refresh all tabs when authentication state changes
+        DispatchQueue.main.async { [weak self] in
+            print("[Auth] Starting tab refresh")
             self?.tabBarController.refreshAllTabs()
+        }
+    }
+    
+    @objc private func handleSignOutRequested() {
+        print("[Auth] Sign out requested, triggering authentication flow")
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.promptForAuthentication()
         }
     }
     

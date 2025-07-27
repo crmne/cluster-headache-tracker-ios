@@ -22,7 +22,18 @@ final class ButtonComponent: BridgeComponent {
 
         let image = UIImage(systemName: data.image ?? "")
         let action = UIAction { [unowned self] _ in
-            self.reply(to: message.event)
+            // Check if this is the Sign Out button
+            if data.title == "Sign Out" {
+                // First reply to the web to trigger sign out
+                self.reply(to: message.event)
+                
+                // Then immediately trigger the authentication flow
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    NotificationCenter.default.post(name: .signOutRequested, object: nil)
+                }
+            } else {
+                self.reply(to: message.event)
+            }
         }
         let item = UIBarButtonItem(title: data.title, image: image, primaryAction: action)
         viewController?.navigationItem.rightBarButtonItem = item
