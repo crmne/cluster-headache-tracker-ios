@@ -72,4 +72,9 @@ To add new native features accessible from the web app:
 - Minimum iOS: 15.6
 - The app uses Swift Package Manager for dependencies (no CocoaPods/Carthage)
 - Production URL is hardcoded in `AppConfig.swift` for release builds
+
+## Principles
+
 - Don't overcomplicate things.
+- Search for the right solution first. Can be from the hotwire-native-ios code (in ~/Code/External/hotwire-native-ios/) and their demos, or online.
+
