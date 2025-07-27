@@ -3,6 +3,10 @@ import SafariServices
 import UIKit
 import WebKit
 
+extension Notification.Name {
+    static let authenticationStateChanged = Notification.Name("authenticationStateChanged")
+}
+
 final class SceneController: UIResponder {
     var window: UIWindow?
     
@@ -18,6 +22,30 @@ final class SceneController: UIResponder {
         // This will respect the path configuration for modal context
         tabBarController.activeNavigator.route(authURL, options: VisitOptions(action: .advance))
     }
+    
+    private func setupAuthenticationObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAuthenticationStateChanged),
+            name: .authenticationStateChanged,
+            object: nil
+        )
+    }
+    
+    @objc private func handleAuthenticationStateChanged() {
+        print("[Auth] Authentication state changed notification received")
+        
+        // Increase delay to ensure authentication has fully propagated
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            print("[Auth] Starting tab refresh after delay")
+            // Refresh all tabs when authentication state changes
+            self?.tabBarController.refreshAllTabs()
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 extension SceneController: UIWindowSceneDelegate {
@@ -28,6 +56,8 @@ extension SceneController: UIWindowSceneDelegate {
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
         
+        setupAuthenticationObserver()
+        
         tabBarController.delegate = self
         tabBarController.load(HotwireTab.all)
     }
@@ -36,14 +66,39 @@ extension SceneController: UIWindowSceneDelegate {
 
 extension SceneController: NavigatorDelegate {
     func handle(proposal: VisitProposal, from navigator: Navigator) -> ProposalResult {
+        print("[Auth] NavigatorDelegate handling proposal to: \(proposal.url.path)")
+        
         // Check for recede_historical_location and handle modal dismissal
         if proposal.url.path == "/recede_historical_location" {
+            print("[Auth] Received recede_historical_location")
             DispatchQueue.main.async {
                 if let presented = navigator.rootViewController.presentedViewController {
-                    presented.dismiss(animated: true)
+                    print("[Auth] Found presented view controller, dismissing...")
+                    presented.dismiss(animated: true) {
+                        print("[Auth] Modal dismissed, posting notification")
+                        // Post notification after successful authentication
+                        NotificationCenter.default.post(name: .authenticationStateChanged, object: nil)
+                    }
+                } else {
+                    print("[Auth] No presented view controller found, posting notification anyway")
+                    // Post notification even if no modal to dismiss
+                    NotificationCenter.default.post(name: .authenticationStateChanged, object: nil)
                 }
             }
             return .reject
+        }
+        
+        // Alternative: Check if we're going to headache_logs from a modal (likely after login)
+        if proposal.url.path == "/headache_logs" && navigator.rootViewController.presentedViewController != nil {
+            print("[Auth] Detected navigation to /headache_logs with modal present - likely successful login")
+            DispatchQueue.main.async {
+                if let presented = navigator.rootViewController.presentedViewController {
+                    presented.dismiss(animated: true) {
+                        print("[Auth] Modal dismissed after login, posting notification")
+                        NotificationCenter.default.post(name: .authenticationStateChanged, object: nil)
+                    }
+                }
+            }
         }
         
         switch proposal.viewController {
