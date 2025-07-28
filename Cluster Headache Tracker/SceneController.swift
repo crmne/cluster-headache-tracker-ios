@@ -44,34 +44,32 @@ final class SceneController: UIResponder {
         print("[Auth] Authentication state changed notification received")
 
         DispatchQueue.main.async { [weak self] in
-            print("[Auth] Starting tab refresh after sign-in")
-            self?.tabBarController.refreshAllTabs()
+            guard let self else { return }
+            print("[Auth] Recreating entire app state")
+
+            // Create a brand new tab bar controller
+            tabBarController = HotwireTabBarController(navigatorDelegate: self)
+            tabBarController.delegate = self
+            tabBarController.load(HotwireTab.all)
+
+            // Replace the root view controller with the new one
+            window?.rootViewController = tabBarController
         }
     }
 
     @objc private func handleSignOutRequested() {
-        print("[Auth] Sign out requested, clearing all navigators")
+        print("[Auth] Sign out requested")
 
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
 
-            // Clear all navigators and refresh tabs
-            if let viewControllers = tabBarController.viewControllers {
-                for (index, _) in viewControllers.enumerated() {
-                    if index < HotwireTab.all.count {
-                        // Select each tab to access its navigator
-                        tabBarController.selectedIndex = index
-                        // Clear the navigator
-                        tabBarController.activeNavigator.clearAll()
-                        // Route to the tab's URL to refresh it
-                        let tab = HotwireTab.all[index]
-                        tabBarController.activeNavigator.route(tab.url, options: VisitOptions(action: .replace))
-                    }
-                }
-            }
+            // Create a brand new tab bar controller (same as authentication change)
+            tabBarController = HotwireTabBarController(navigatorDelegate: self)
+            tabBarController.delegate = self
+            tabBarController.load(HotwireTab.all)
 
-            // Reset to first tab
-            tabBarController.selectedIndex = 0
+            // Replace the root view controller with the new one
+            window?.rootViewController = tabBarController
 
             // Navigate to sign in
             promptForAuthentication()
@@ -161,11 +159,13 @@ extension SceneController: NavigatorDelegate {
 
 extension SceneController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        guard let index = tabBarController.viewControllers?.firstIndex(of: viewController) else { return true }
+
         // Check if the "New" tab is being selected (index 2)
-        if let index = tabBarController.viewControllers?.firstIndex(of: viewController), index == 2 {
+        if index == 2 {
             // Navigate to the new headache page
             let newHeadacheURL = rootURL.appendingPathComponent("headache_logs/new")
-            self.tabBarController.activeNavigator.route(newHeadacheURL)
+            self.tabBarController.activeNavigator.route(newHeadacheURL, options: VisitOptions(action: .advance))
 
             return false // Don't actually select the "New" tab
         }
