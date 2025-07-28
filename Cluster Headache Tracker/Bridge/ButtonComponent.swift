@@ -1,11 +1,16 @@
 import HotwireNative
 import UIKit
+import WebKit
 
 final class ButtonComponent: BridgeComponent {
     override class var name: String { "button" }
 
     private var viewController: UIViewController? {
         delegate?.destination as? UIViewController
+    }
+    
+    private var webView: WKWebView? {
+        (delegate?.destination as? VisitableViewController)?.visitableView.webView
     }
 
     override func onReceive(message: Message) {
@@ -31,12 +36,42 @@ final class ButtonComponent: BridgeComponent {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     NotificationCenter.default.post(name: .signOutRequested, object: nil)
                 }
+            } else if data.title == "Print" {
+                // Handle print button
+                self.reply(to: message.event)
+                self.printCurrentPage()
             } else {
                 self.reply(to: message.event)
             }
         }
         let item = UIBarButtonItem(title: data.title, image: image, primaryAction: action)
         viewController?.navigationItem.rightBarButtonItem = item
+    }
+    
+    private func printCurrentPage() {
+        guard let webView = webView else { return }
+        
+        let printController = UIPrintInteractionController.shared
+        
+        // Configure print info
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.outputType = .general
+        printInfo.jobName = "Headache Log"
+        printController.printInfo = printInfo
+        
+        // Set the print formatter
+        printController.printFormatter = webView.viewPrintFormatter()
+        
+        // Present the print controller
+        printController.present(animated: true) { _, completed, error in
+            if completed {
+                print("Print completed successfully")
+            } else if let error = error {
+                print("Print failed with error: \(error.localizedDescription)")
+            } else {
+                print("Print cancelled")
+            }
+        }
     }
 }
 
