@@ -29,6 +29,32 @@ The main reason for creating this iOS app is to increase accessibility and visib
 
 3. Build and run the project on your iOS device or simulator.
 
+## 🔧 Development Setup
+
+### Git Hooks
+
+This project uses pre-commit hooks to ensure code quality. To set them up:
+
+1. Install pre-commit and required tools:
+   ```bash
+   brew install pre-commit swiftlint swiftformat
+   ```
+
+2. Install the git hooks:
+   ```bash
+   pre-commit install
+   pre-commit install --hook-type pre-push
+   ```
+
+The following checks will run automatically:
+- **Pre-commit**: SwiftLint, SwiftFormat, trailing whitespace removal, file size checks
+- **Pre-push**: Unit tests and build verification
+
+To run the hooks manually:
+```bash
+pre-commit run --all-files
+```
+
 ## 🔗 Related Projects
 
 - [Cluster Headache Tracker (Web)](https://github.com/crmne/cluster-headache-tracker): The main web application that this iOS app wraps.

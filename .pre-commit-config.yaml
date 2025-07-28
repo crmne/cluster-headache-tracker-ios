@@ -1,0 +1,95 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+default_stages: [pre-commit]
+
+repos:
+  - repo: local
+    hooks:
+      # SwiftLint - Swift style and conventions
+      - id: swiftlint
+        name: SwiftLint
+        entry: swiftlint
+        language: system
+        files: \.swift$
+        args: [--strict]
+        
+      # SwiftFormat - Swift code formatter
+      - id: swiftformat
+        name: SwiftFormat
+        entry: swiftformat
+        language: system
+        files: \.swift$
+        args: [--swiftversion, "5.9"]
+        
+      # Check for trailing whitespace
+      - id: trailing-whitespace-fix
+        name: Fix Trailing Whitespace
+        entry: bash
+        args: ['-c', 'find . -name "*.swift" -o -name "*.h" -o -name "*.m" | xargs -I {} sed -i "" -E "s/[[:space:]]+$//" {}']
+        language: system
+        pass_filenames: false
+        
+      # Check for mixed line endings
+      - id: mixed-line-ending
+        name: Mixed line ending
+        entry: bash
+        args: ['-c', 'find . -name "*.swift" -o -name "*.h" -o -name "*.m" | xargs file | grep -E "with (CR|CRLF) line" || true']
+        language: system
+        pass_filenames: false
+        always_run: false
+        
+      # Check file sizes
+      - id: check-large-files-custom
+        name: Check for large files
+        entry: bash
+        args: ['-c', 'find . -type f -size +1M | grep -v -E "(\.git|build|\.xcodeproj|\.xcworkspace|\.framework|\.a|\.app)" | while read f; do echo "Large file: $f ($(ls -lh "$f" | awk "{print \$5}"))" && exit 1; done']
+        language: system
+        pass_filenames: false
+        
+      # Xcode project file syntax check
+      - id: check-xcode-project
+        name: Check Xcode project file
+        entry: plutil -lint
+        language: system
+        files: project\.pbxproj$
+        
+      # Info.plist syntax check
+      - id: check-plist
+        name: Check plist files
+        entry: plutil -lint
+        language: system
+        files: \.plist$
+        
+      # Run unit tests before push
+      - id: unit-tests
+        name: Run Unit Tests
+        entry: xcodebuild test -scheme "Cluster Headache Tracker" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' -quiet
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+        
+      # Build check before push
+      - id: build-check
+        name: Build Check
+        entry: xcodebuild -scheme "Cluster Headache Tracker" -sdk iphonesimulator -configuration Debug CODE_SIGNING_ALLOWED=NO -quiet
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+
+  # Use pre-commit's built-in hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-json
+      - id: check-yaml
+      - id: end-of-file-fixer
+        exclude: |
+          (?x)^(
+            .*\.pbxproj|
+            .*\.xcworkspacedata|
+            .*\.xcscheme
+          )$
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+      - id: check-merge-conflict
+      - id: check-case-conflict

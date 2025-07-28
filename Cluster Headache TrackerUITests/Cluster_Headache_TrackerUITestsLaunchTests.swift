@@ -8,8 +8,7 @@
 import XCTest
 
 final class Cluster_Headache_TrackerUITestsLaunchTests: XCTestCase {
-
-    override class var runsForEachTargetApplicationUIConfiguration: Bool {
+    override static var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
 

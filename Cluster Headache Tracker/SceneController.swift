@@ -10,20 +10,20 @@ extension Notification.Name {
 
 final class SceneController: UIResponder {
     var window: UIWindow?
-    
+
     private let rootURL = AppConfig.current
     private var tabBarController: HotwireTabBarController!
-    
+
     // MARK: - Authentication
-    
+
     private func promptForAuthentication() {
         let authURL = rootURL.appendingPathComponent("/users/sign_in")
-        
+
         // Use the active navigator's modal presentation instead
         // This will respect the path configuration for modal context
         tabBarController.activeNavigator.route(authURL, options: VisitOptions(action: .advance))
     }
-    
+
     private func setupAuthenticationObserver() {
         NotificationCenter.default.addObserver(
             self,
@@ -31,7 +31,7 @@ final class SceneController: UIResponder {
             name: .authenticationStateChanged,
             object: nil
         )
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleSignOutRequested),
@@ -39,73 +39,72 @@ final class SceneController: UIResponder {
             object: nil
         )
     }
-    
+
     @objc private func handleAuthenticationStateChanged() {
         print("[Auth] Authentication state changed notification received")
-        
+
         DispatchQueue.main.async { [weak self] in
             print("[Auth] Starting tab refresh after sign-in")
             self?.tabBarController.refreshAllTabs()
         }
     }
-    
+
     @objc private func handleSignOutRequested() {
         print("[Auth] Sign out requested, clearing all navigators")
-        
+
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
+            guard let self else { return }
+
             // Clear all navigators and refresh tabs
-            if let viewControllers = self.tabBarController.viewControllers {
+            if let viewControllers = tabBarController.viewControllers {
                 for (index, _) in viewControllers.enumerated() {
                     if index < HotwireTab.all.count {
                         // Select each tab to access its navigator
-                        self.tabBarController.selectedIndex = index
+                        tabBarController.selectedIndex = index
                         // Clear the navigator
-                        self.tabBarController.activeNavigator.clearAll()
+                        tabBarController.activeNavigator.clearAll()
                         // Route to the tab's URL to refresh it
                         let tab = HotwireTab.all[index]
-                        self.tabBarController.activeNavigator.route(tab.url, options: VisitOptions(action: .replace))
+                        tabBarController.activeNavigator.route(tab.url, options: VisitOptions(action: .replace))
                     }
                 }
             }
-            
+
             // Reset to first tab
-            self.tabBarController.selectedIndex = 0
-            
+            tabBarController.selectedIndex = 0
+
             // Navigate to sign in
-            self.promptForAuthentication()
+            promptForAuthentication()
         }
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 }
 
 extension SceneController: UIWindowSceneDelegate {
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
-        
+
         window = UIWindow(windowScene: windowScene)
-        
+
         // Create tab bar controller
         tabBarController = HotwireTabBarController(navigatorDelegate: self)
         tabBarController.delegate = self
         tabBarController.load(HotwireTab.all)
-        
+
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
-        
+
         setupAuthenticationObserver()
     }
 }
 
-
 extension SceneController: NavigatorDelegate {
     func handle(proposal: VisitProposal, from navigator: Navigator) -> ProposalResult {
         print("[Auth] NavigatorDelegate handling proposal to: \(proposal.url.path)")
-        
+
         // Check for recede_historical_location and handle modal dismissal
         if proposal.url.path == "/recede_historical_location" {
             print("[Auth] Received recede_historical_location")
@@ -125,9 +124,9 @@ extension SceneController: NavigatorDelegate {
             }
             return .reject
         }
-        
+
         // Alternative: Check if we're going to headache_logs from a modal (likely after login)
-        if proposal.url.path == "/headache_logs" && navigator.rootViewController.presentedViewController != nil {
+        if proposal.url.path == "/headache_logs", navigator.rootViewController.presentedViewController != nil {
             print("[Auth] Detected navigation to /headache_logs with modal present - likely successful login")
             DispatchQueue.main.async {
                 if let presented = navigator.rootViewController.presentedViewController {
@@ -138,13 +137,13 @@ extension SceneController: NavigatorDelegate {
                 }
             }
         }
-        
+
         switch proposal.viewController {
         default:
             return .accept
         }
     }
-    
+
     func visitableDidFailRequest(_ visitable: any Visitable, error: any Error, retryHandler: RetryBlock?) {
         if let turboError = error as? TurboError, case let .http(statusCode) = turboError, statusCode == 401 {
             promptForAuthentication()
@@ -167,12 +166,10 @@ extension SceneController: UITabBarControllerDelegate {
             // Navigate to the new headache page
             let newHeadacheURL = rootURL.appendingPathComponent("headache_logs/new")
             self.tabBarController.activeNavigator.route(newHeadacheURL)
-            
+
             return false // Don't actually select the "New" tab
         }
-        
+
         return true
     }
-    
 }
-

@@ -77,4 +77,3 @@ To add new native features accessible from the web app:
 
 - Don't overcomplicate things.
 - Search for the right solution first. Can be from the hotwire-native-ios code (in ~/Code/External/hotwire-native-ios/) and their demos, or online.
-
