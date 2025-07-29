@@ -58,6 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Load the path configuration
         Hotwire.loadPathConfiguration(from: [
             .file(Bundle.main.url(forResource: "path-configuration", withExtension: "json")!),
+            .server(AppConfig.current.appendingPathComponent("configurations/ios_v2.json"))
         ])
 
         // Set custom user agent to include Turbo Native and version for detection

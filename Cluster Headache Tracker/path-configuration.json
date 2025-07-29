@@ -8,7 +8,8 @@
         "/headache_logs$",
         "/charts$",
         "/settings$",
-        "/feedback$"
+        "/feedback$",
+        "/feedback/thank_you$"
       ],
       "properties": {
           "context": "default"
