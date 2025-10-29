@@ -1,10 +1,18 @@
+import Honeybadger
 import HotwireNative
 import UIKit
 import WebKit
 
+// Simple environment config holder for secrets like the Honeybadger API key.
+// Replace the placeholder with your actual key or load it from a secure source.
+enum EnvironmentConfig {
+    static let honeybadgerAPIKey: String? = Bundle.main.object(forInfoDictionaryKey: "HONEYBADGER_API_KEY") as? String
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        configureHoneybadger()
         configureAppearance()
         configureHotwire()
         return true
@@ -14,6 +22,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options _: UIScene.ConnectionOptions) -> UISceneConfiguration {
         UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+
+    // MARK: - Honeybadger Configuration
+
+    private func configureHoneybadger() {
+        // Only configure if API key is available
+        guard let apiKey = EnvironmentConfig.honeybadgerAPIKey,
+              !apiKey.isEmpty
+        else {
+            print("⚠️ Honeybadger API key not found. Error tracking disabled.")
+            return
+        }
+
+        // Configure Honeybadger
+        Honeybadger.configure(
+            apiKey: apiKey,
+            environment: AppConfig.isDebug ? "development" : "production"
+        )
+
+        // Add app context
+        Honeybadger.setContext(context: [
+            "app_version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown",
+            "build_number": Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "Unknown",
+            "ios_version": UIDevice.current.systemVersion,
+            "device_model": UIDevice.current.model,
+        ])
+
+        print("✅ Honeybadger configured successfully")
     }
 
     // Make navigation and tab bars opaque.
@@ -58,7 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Load the path configuration
         Hotwire.loadPathConfiguration(from: [
             .file(Bundle.main.url(forResource: "path-configuration", withExtension: "json")!),
-            .server(AppConfig.current.appendingPathComponent("configurations/ios_v2.json"))
+            .server(AppConfig.current.appendingPathComponent("configurations/ios_v2.json")),
         ])
 
         // Set custom user agent to include Turbo Native and version for detection

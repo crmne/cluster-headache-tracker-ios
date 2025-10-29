@@ -1,3 +1,4 @@
+import Honeybadger
 import HotwireNative
 import SafariServices
 import UIKit
@@ -143,13 +144,41 @@ extension SceneController: NavigatorDelegate {
     }
 
     func visitableDidFailRequest(_ visitable: any Visitable, error: any Error, retryHandler: RetryBlock?) {
+        let visitableURLString: String = {
+            if let webVC = visitable as? HotwireWebViewController {
+                return webVC.currentVisitableURL.absoluteString
+            }
+            if let vc = visitable as? VisitableViewController,
+               let url = (vc as? HotwireWebViewController)?.currentVisitableURL
+            {
+                return url.absoluteString
+            }
+            return "unknown"
+        }()
+
         if let turboError = error as? TurboError, case let .http(statusCode) = turboError, statusCode == 401 {
+            // Don't report 401 errors to Honeybadger - these are expected authentication failures
             promptForAuthentication()
         } else if let errorPresenter = visitable as? ErrorPresenter {
+            // Report the error to Honeybadger with context
+            Honeybadger.notify(error: error, context: [
+                "source": "visitableDidFailRequest",
+                "url": visitableURLString,
+                "error_type": String(describing: type(of: error)),
+            ])
+
             errorPresenter.presentError(error) {
                 retryHandler?()
             }
         } else {
+            // Report unexpected errors to Honeybadger
+            Honeybadger.notify(error: error, context: [
+                "source": "visitableDidFailRequest",
+                "url": visitableURLString,
+                "error_type": String(describing: type(of: error)),
+                "unhandled": "true",
+            ])
+
             let alert = UIAlertController(title: "Visit failed!", message: error.localizedDescription, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             tabBarController.activeNavigator.present(alert, animated: true)

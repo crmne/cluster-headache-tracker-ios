@@ -1,3 +1,4 @@
+import Honeybadger
 import HotwireNative
 import UIKit
 import WebKit
@@ -23,7 +24,14 @@ final class ButtonComponent: BridgeComponent {
     }
 
     private func addButton(via message: Message) {
-        guard let data: MessageData = message.data() else { return }
+        guard let data: MessageData = message.data() else {
+            Honeybadger.notify(errorString: "Failed to decode button message data", context: [
+                "source": "ButtonComponent",
+                "event": message.event,
+                "rawData": message.jsonData,
+            ])
+            return
+        }
 
         let image = UIImage(systemName: data.image ?? "")
         let action = UIAction { [weak self] _ in
@@ -69,6 +77,12 @@ final class ButtonComponent: BridgeComponent {
                 print("Print completed successfully")
             } else if let error {
                 print("Print failed with error: \(error.localizedDescription)")
+                // Report print errors to Honeybadger
+                Honeybadger.notify(error: error, context: [
+                    "source": "ButtonComponent",
+                    "action": "print",
+                    "url": webView.url?.absoluteString ?? "unknown",
+                ])
             } else {
                 print("Print cancelled")
             }

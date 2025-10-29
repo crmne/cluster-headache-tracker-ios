@@ -1,13 +1,22 @@
 {
-  "originHash" : "e043e35d89fc9c175f4169f4aa9709becdfb87b915ef76ee944456cb593c96b1",
+  "originHash" : "b5fb80a68634f786cd323a8819f7b6b904782aa51b0f198c08741efce3a04515",
   "pins" : [
+    {
+      "identity" : "honeybadger-cocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/honeybadger-io/honeybadger-cocoa",
+      "state" : {
+        "revision" : "0f5ae78fa04e69cafcf03a97293b1de82ce4e551",
+        "version" : "1.1.0"
+      }
+    },
     {
       "identity" : "hotwire-native-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hotwired/hotwire-native-ios",
       "state" : {
-        "revision" : "c466d3350fab1356de9385ec14961d95039b8409",
-        "version" : "1.2.1"
+        "revision" : "595dba37c4918afd0e2d470109bc0c356d6e9afe",
+        "version" : "1.2.2"
       }
     }
   ],

@@ -1,3 +1,4 @@
+import Honeybadger
 import HotwireNative
 import UIKit
 import WebKit
@@ -39,7 +40,15 @@ class SafeAreaWebViewController: HotwireWebViewController {
                 }
             })();
             """
-            visitableView.webView?.evaluateJavaScript(script)
+            visitableView.webView?.evaluateJavaScript(script) { _, error in
+                if let error {
+                    Honeybadger.notify(error: error, context: [
+                        "source": "SafeAreaWebViewController",
+                        "action": "iframe_fix_script",
+                        "url": self.currentVisitableURL.absoluteString,
+                    ])
+                }
+            }
         }
     }
 }

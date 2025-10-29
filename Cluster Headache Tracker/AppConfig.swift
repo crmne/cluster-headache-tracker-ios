@@ -7,9 +7,17 @@ enum AppConfig {
     /// Update this to choose which environment is used
     static var current: URL {
         #if DEBUG
-            local
+            remote
         #else
             remote
+        #endif
+    }
+
+    static var isDebug: Bool {
+        #if DEBUG
+            true
+        #else
+            false
         #endif
     }
 }
