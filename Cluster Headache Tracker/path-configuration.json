@@ -1,8 +1,50 @@
 {
   "settings": {
-      "enable_feature_x": true
+    "navigation": {
+      "version": 3
+    }
   },
   "rules": [
+    {
+      "patterns": [
+        ".*"
+      ],
+      "properties": {
+        "context": "default",
+        "pull_to_refresh_enabled": true
+      }
+    },
+    {
+      "patterns": [
+        "/users/sign_in$",
+        "/users/sign_up$",
+        "/users/password/new$",
+        "/users/password/edit$",
+        "/users/password$",
+        "/login$",
+        "/signup$",
+        "/register$"
+      ],
+      "properties": {
+        "context": "modal",
+        "pull_to_refresh_enabled": false,
+        "modal_style": "large",
+        "modal_dismiss_gesture_enabled": true
+      }
+    },
+    {
+      "patterns": [
+        "/headache_logs/new$",
+        "/headache_logs/.*/edit$",
+        "/feedback/new$"
+      ],
+      "properties": {
+        "context": "modal",
+        "pull_to_refresh_enabled": false,
+        "modal_style": "page_sheet",
+        "modal_dismiss_gesture_enabled": true
+      }
+    },
     {
       "patterns": [
         "/headache_logs$",
@@ -12,35 +54,7 @@
         "/feedback/thank_you$"
       ],
       "properties": {
-          "context": "default"
-      }
-    },
-    {
-      "patterns": [
-        "/headache_logs/new$",
-        "/headache_logs/.*/edit$"
-      ],
-      "properties": {
-        "context": "modal",
-        "pull_to_refresh_enabled": true,
-        "presentation": "default",
-        "modal_style": "pageSheet",
-        "modal_dismiss_gesture_enabled": true
-      }
-    },
-    {
-      "patterns": [
-        "/users/sign_in$",
-        "/users/sign_up$",
-        "/users/password/new$",
-        "/users/password$",
-        "/login$",
-        "/signup$",
-        "/register$"
-      ],
-      "properties": {
-        "context": "modal",
-        "pull_to_refresh_enabled": false
+        "context": "default"
       }
     }
   ]

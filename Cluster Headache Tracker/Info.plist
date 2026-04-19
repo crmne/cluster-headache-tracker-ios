@@ -21,6 +21,10 @@
 	</dict>
 	<key>HONEYBADGER_API_KEY</key>
 	<string>$(HONEYBADGER_API_KEY)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is used for barcode and document scanning bridge components.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Face ID can be used by bridge components to protect sensitive screens.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -34,5 +38,9 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location access can be requested by bridge components when a workflow needs it.</string>
+	<key>NFCReaderUsageDescription</key>
+	<string>NFC access can be used by bridge components to read supported tags.</string>
 </dict>
 </plist>

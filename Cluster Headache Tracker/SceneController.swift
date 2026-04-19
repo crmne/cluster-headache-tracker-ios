@@ -1,84 +1,16 @@
 import Honeybadger
 import HotwireNative
-import SafariServices
 import UIKit
-import WebKit
-
-extension Notification.Name {
-    static let authenticationStateChanged = Notification.Name("authenticationStateChanged")
-    static let signOutRequested = Notification.Name("signOutRequested")
-}
 
 final class SceneController: UIResponder {
     var window: UIWindow?
 
-    private let rootURL = AppConfig.current
-    private var tabBarController: HotwireTabBarController!
-
-    // MARK: - Authentication
-
-    private func promptForAuthentication() {
-        let authURL = rootURL.appendingPathComponent("/users/sign_in")
-
-        // Use the active navigator's modal presentation instead
-        // This will respect the path configuration for modal context
-        tabBarController.activeNavigator.route(authURL, options: VisitOptions(action: .advance))
-    }
-
-    private func setupAuthenticationObserver() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleAuthenticationStateChanged),
-            name: .authenticationStateChanged,
-            object: nil
-        )
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleSignOutRequested),
-            name: .signOutRequested,
-            object: nil
-        )
-    }
-
-    @objc private func handleAuthenticationStateChanged() {
-        print("[Auth] Authentication state changed notification received")
-
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            print("[Auth] Recreating entire app state")
-
-            // Create a brand new tab bar controller
-            tabBarController = HotwireTabBarController(navigatorDelegate: self)
-            tabBarController.delegate = self
-            tabBarController.load(HotwireTab.all)
-
-            // Replace the root view controller with the new one
-            window?.rootViewController = tabBarController
-        }
-    }
-
-    @objc private func handleSignOutRequested() {
-        print("[Auth] Sign out requested")
-
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-
-            // Create a brand new tab bar controller (same as authentication change)
-            tabBarController = HotwireTabBarController(navigatorDelegate: self)
-            tabBarController.delegate = self
-            tabBarController.load(HotwireTab.all)
-
-            // Replace the root view controller with the new one
-            window?.rootViewController = tabBarController
-
-            // Navigate to sign in
-            promptForAuthentication()
-        }
-    }
+    private var tabBarController: AppTabBarController?
+    private var notificationObservers = [NSObjectProtocol]()
+    private var isAuthenticationRoutePending = false
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        notificationObservers.forEach(NotificationCenter.default.removeObserver)
     }
 }
 
@@ -86,119 +18,177 @@ extension SceneController: UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
-        window = UIWindow(windowScene: windowScene)
+        let window = UIWindow(windowScene: windowScene)
+        self.window = window
 
-        // Create tab bar controller
-        tabBarController = HotwireTabBarController(navigatorDelegate: self)
-        tabBarController.delegate = self
-        tabBarController.load(HotwireTab.all)
+        installRootController(selectedIndex: nil)
+        observeNotifications()
 
-        window?.rootViewController = tabBarController
-        window?.makeKeyAndVisible()
-
-        setupAuthenticationObserver()
+        window.makeKeyAndVisible()
     }
 }
 
 extension SceneController: NavigatorDelegate {
     func handle(proposal: VisitProposal, from navigator: Navigator) -> ProposalResult {
-        print("[Auth] NavigatorDelegate handling proposal to: \(proposal.url.path)")
-
-        // Check for recede_historical_location and handle modal dismissal
-        if proposal.url.path == "/recede_historical_location" {
-            print("[Auth] Received recede_historical_location")
-            DispatchQueue.main.async {
-                if let presented = navigator.rootViewController.presentedViewController {
-                    print("[Auth] Found presented view controller, dismissing...")
-                    presented.dismiss(animated: true) {
-                        print("[Auth] Modal dismissed, posting notification")
-                        // Post notification after successful authentication
-                        NotificationCenter.default.post(name: .authenticationStateChanged, object: nil)
-                    }
-                } else {
-                    print("[Auth] No presented view controller found, posting notification anyway")
-                    // Post notification even if no modal to dismiss
-                    NotificationCenter.default.post(name: .authenticationStateChanged, object: nil)
-                }
-            }
+        if AppConfig.isCompatibilityAuthenticationRefreshURL(proposal.url) {
+            rebuildAfterAuthentication(using: navigator)
             return .reject
         }
 
-        // Alternative: Check if we're going to headache_logs from a modal (likely after login)
-        if proposal.url.path == "/headache_logs", navigator.rootViewController.presentedViewController != nil {
-            print("[Auth] Detected navigation to /headache_logs with modal present - likely successful login")
-            DispatchQueue.main.async {
-                if let presented = navigator.rootViewController.presentedViewController {
-                    presented.dismiss(animated: true) {
-                        print("[Auth] Modal dismissed after login, posting notification")
-                        NotificationCenter.default.post(name: .authenticationStateChanged, object: nil)
-                    }
-                }
-            }
-        }
+        return .accept
+    }
 
-        switch proposal.viewController {
-        default:
-            return .accept
+    func requestDidFinish(at url: URL) {
+        if AppConfig.isAuthenticationURL(url) || !authenticationIsVisible {
+            isAuthenticationRoutePending = false
         }
     }
 
     func visitableDidFailRequest(_ visitable: any Visitable, error: any Error, retryHandler: RetryBlock?) {
-        let visitableURLString: String = {
-            if let webVC = visitable as? HotwireWebViewController {
-                return webVC.currentVisitableURL.absoluteString
+        if let turboError = error as? TurboError,
+           case let .http(statusCode) = turboError,
+           statusCode == 401
+        {
+            guard !authenticationIsVisible else {
+                return
             }
-            if let vc = visitable as? VisitableViewController,
-               let url = (vc as? HotwireWebViewController)?.currentVisitableURL
-            {
-                return url.absoluteString
-            }
-            return "unknown"
-        }()
 
-        if let turboError = error as? TurboError, case let .http(statusCode) = turboError, statusCode == 401 {
-            // Don't report 401 errors to Honeybadger - these are expected authentication failures
-            promptForAuthentication()
-        } else if let errorPresenter = visitable as? ErrorPresenter {
-            // Report the error to Honeybadger with context
-            Honeybadger.notify(error: error, context: [
-                "source": "visitableDidFailRequest",
-                "url": visitableURLString,
-                "error_type": String(describing: type(of: error)),
-            ])
+            cleanupUnauthorizedFailure()
+            presentAuthentication()
+            return
+        }
 
+        let context = errorContext(for: visitable, error: error)
+        Honeybadger.notify(error: error, context: context)
+
+        if let errorPresenter = visitable as? ErrorPresenter {
             errorPresenter.presentError(error) {
                 retryHandler?()
             }
-        } else {
-            // Report unexpected errors to Honeybadger
-            Honeybadger.notify(error: error, context: [
-                "source": "visitableDidFailRequest",
-                "url": visitableURLString,
-                "error_type": String(describing: type(of: error)),
-                "unhandled": "true",
-            ])
-
-            let alert = UIAlertController(title: "Visit failed!", message: error.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            tabBarController.activeNavigator.present(alert, animated: true)
+            return
         }
+
+        let alert = UIAlertController(
+            title: "Visit failed",
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        tabBarController?.activeNavigator.present(alert, animated: true)
     }
 }
 
-extension SceneController: UITabBarControllerDelegate {
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        guard let index = tabBarController.viewControllers?.firstIndex(of: viewController) else { return true }
+private extension SceneController {
+    var authenticationIsVisible: Bool {
+        guard let navigator = tabBarController?.activeNavigator else { return false }
 
-        // Check if the "New" tab is being selected (index 2)
-        if index == 2 {
-            // Navigate to the new headache page
-            let newHeadacheURL = rootURL.appendingPathComponent("headache_logs/new")
-            self.tabBarController.activeNavigator.route(newHeadacheURL, options: VisitOptions(action: .advance))
+        return navigator.modalRootViewController.viewControllers.contains { viewController in
+            guard let visitable = viewController as? VisitableViewController else {
+                return false
+            }
 
-            return false // Don't actually select the "New" tab
+            return AppConfig.isAuthenticationURL(visitable.initialVisitableURL)
+        }
+    }
+
+    func installRootController(selectedIndex: Int?) {
+        let controller = AppTabBarController(navigatorDelegate: self)
+        controller.onCreateRequested = { [weak self] in
+            self?.routeToNewHeadacheLog()
+        }
+        controller.load(AppTabs.all)
+
+        if let selectedIndex,
+           AppTabs.all.indices.contains(selectedIndex),
+           selectedIndex != controller.selectedIndex
+        {
+            controller.selectedIndex = selectedIndex
         }
 
-        return true
+        tabBarController = controller
+        window?.rootViewController = controller
+    }
+
+    func observeNotifications() {
+        guard notificationObservers.isEmpty else { return }
+
+        let signOutObserver = NotificationCenter.default.addObserver(
+            forName: .clusterHeadacheTrackerSignOutRequested,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleSignOutRequested()
+        }
+
+        notificationObservers.append(signOutObserver)
+    }
+
+    func presentAuthentication(after delay: TimeInterval = 0) {
+        guard let tabBarController else { return }
+        guard !isAuthenticationRoutePending, !authenticationIsVisible else { return }
+
+        isAuthenticationRoutePending = true
+
+        let route = { [weak tabBarController] in
+            guard let tabBarController else { return }
+            tabBarController.activeNavigator.route(AppConfig.signInURL)
+        }
+
+        if delay == 0 {
+            DispatchQueue.main.async(execute: route)
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: route)
+        }
+    }
+
+    func routeToNewHeadacheLog() {
+        tabBarController?.activeNavigator.route(AppConfig.newHeadacheLogURL)
+    }
+
+    func rebuildAfterAuthentication(using navigator: Navigator) {
+        isAuthenticationRoutePending = false
+        let selectedIndex = tabBarController?.selectedIndex
+
+        let rebuild = { [weak self] in
+            self?.installRootController(selectedIndex: selectedIndex)
+        }
+
+        if navigator.rootViewController.presentedViewController != nil {
+            navigator.rootViewController.dismiss(animated: true, completion: rebuild)
+        } else {
+            rebuild()
+        }
+    }
+
+    func handleSignOutRequested() {
+        isAuthenticationRoutePending = false
+        let selectedIndex = tabBarController?.selectedIndex
+
+        installRootController(selectedIndex: selectedIndex)
+        presentAuthentication(after: 0.35)
+    }
+
+    func cleanupUnauthorizedFailure() {
+        tabBarController?.activeNavigator.pop(animated: false)
+    }
+
+    func errorContext(for visitable: any Visitable, error: any Error) -> [String: String] {
+        [
+            "source": "SceneController",
+            "url": visitableURLString(for: visitable),
+            "error_type": String(describing: type(of: error)),
+        ]
+    }
+
+    func visitableURLString(for visitable: any Visitable) -> String {
+        if let webViewController = visitable as? HotwireWebViewController {
+            return webViewController.currentVisitableURL.absoluteString
+        }
+
+        if let visitableController = visitable as? VisitableViewController {
+            return visitableController.currentVisitableURL.absoluteString
+        }
+
+        return "unknown"
     }
 }
