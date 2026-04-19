@@ -6,11 +6,11 @@ final class SceneController: UIResponder {
     var window: UIWindow?
 
     private var tabBarController: AppTabBarController?
-    private var notificationObservers = [NSObjectProtocol]()
     private var isAuthenticationRoutePending = false
+    private var signOutObserver: NSObjectProtocol?
 
     deinit {
-        notificationObservers.forEach(NotificationCenter.default.removeObserver)
+        signOutObserver.map(NotificationCenter.default.removeObserver)
     }
 }
 
@@ -22,7 +22,7 @@ extension SceneController: UIWindowSceneDelegate {
         self.window = window
 
         installRootController(selectedIndex: nil)
-        observeNotifications()
+        observeSignOut()
 
         window.makeKeyAndVisible()
     }
@@ -109,20 +109,6 @@ private extension SceneController {
         window?.rootViewController = controller
     }
 
-    func observeNotifications() {
-        guard notificationObservers.isEmpty else { return }
-
-        let signOutObserver = NotificationCenter.default.addObserver(
-            forName: .clusterHeadacheTrackerSignOutRequested,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.handleSignOutRequested()
-        }
-
-        notificationObservers.append(signOutObserver)
-    }
-
     func presentAuthentication(after delay: TimeInterval = 0) {
         guard let tabBarController else { return }
         guard !isAuthenticationRoutePending, !authenticationIsVisible else { return }
@@ -160,12 +146,20 @@ private extension SceneController {
         }
     }
 
-    func handleSignOutRequested() {
-        isAuthenticationRoutePending = false
-        let selectedIndex = tabBarController?.selectedIndex
+    func observeSignOut() {
+        signOutObserver = NotificationCenter.default.addObserver(
+            forName: .appSignOutRequested,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleSignOut()
+        }
+    }
 
-        installRootController(selectedIndex: selectedIndex)
-        presentAuthentication(after: 0.35)
+    func handleSignOut() {
+        isAuthenticationRoutePending = false
+        installRootController(selectedIndex: 0)
+        presentAuthentication()
     }
 
     func cleanupUnauthorizedFailure() {

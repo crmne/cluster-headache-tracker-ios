@@ -63,7 +63,7 @@ private extension AppDelegate {
         Bridgework.coreComponents.filter { component in
             component != ButtonComponent.self && component != ShareComponent.self
         } + [
-            CompatibleButtonComponent.self,
+            AppButtonComponent.self,
             CompatibleShareComponent.self,
         ]
     }
