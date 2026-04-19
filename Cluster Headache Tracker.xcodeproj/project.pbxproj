@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DB8561302CC2883A003309C3 /* HotwireNative in Frameworks */ = {isa = PBXBuildFile; productRef = DB85612F2CC2883A003309C3 /* HotwireNative */; };
-		DBF100012F1000010000001 /* BridgeComponents in Frameworks */ = {isa = PBXBuildFile; productRef = DBF100112F1000010000001 /* BridgeComponents */; };
 		DBED15102EB244C700E52E50 /* Honeybadger in Frameworks */ = {isa = PBXBuildFile; productRef = DBED150F2EB244C700E52E50 /* Honeybadger */; };
+		DBF100012F1000010000001 /* BridgeComponents in Frameworks */ = {isa = PBXBuildFile; productRef = DBF100112F1000010000001 /* BridgeComponents */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,11 +64,6 @@
 			path = "Cluster Headache TrackerUITests";
 			sourceTree = "<group>";
 		};
-		DBED15132EB2501200E52E50 /* Config */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Config;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +97,6 @@
 		DB8560F12CC28605003309C3 = {
 			isa = PBXGroup;
 			children = (
-				DBED15132EB2501200E52E50 /* Config */,
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
 				DB8561132CC28607003309C3 /* Cluster Headache TrackerTests */,
 				DB85611D2CC28607003309C3 /* Cluster Headache TrackerUITests */,
@@ -137,7 +131,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
-				DBED15132EB2501200E52E50 /* Config */,
 			);
 			name = "Cluster Headache Tracker";
 			packageProductDependencies = (
@@ -308,8 +301,6 @@
 /* Begin XCBuildConfiguration section */
 		DB8561242CC28607003309C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = DBED15132EB2501200E52E50 /* Config */;
-			baseConfigurationReferenceRelativePath = Secrets.Debug.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -343,8 +334,6 @@
 		};
 		DB8561252CC28607003309C3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = DBED15132EB2501200E52E50 /* Config */;
-			baseConfigurationReferenceRelativePath = Secrets.Release.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -617,20 +606,20 @@
 				kind = branch;
 			};
 		};
-		DBF100032F1000010000001 /* XCRemoteSwiftPackageReference "bridge-components" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/joemasilotti/bridge-components";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.13.0;
-			};
-		};
 		DBED150E2EB244C700E52E50 /* XCRemoteSwiftPackageReference "honeybadger-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/honeybadger-io/honeybadger-cocoa";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.1.0;
+			};
+		};
+		DBF100032F1000010000001 /* XCRemoteSwiftPackageReference "bridge-components" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/joemasilotti/bridge-components";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.13.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -641,15 +630,15 @@
 			package = DB85612E2CC2883A003309C3 /* XCRemoteSwiftPackageReference "hotwire-native-ios" */;
 			productName = HotwireNative;
 		};
-		DBF100112F1000010000001 /* BridgeComponents */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DBF100032F1000010000001 /* XCRemoteSwiftPackageReference "bridge-components" */;
-			productName = BridgeComponents;
-		};
 		DBED150F2EB244C700E52E50 /* Honeybadger */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DBED150E2EB244C700E52E50 /* XCRemoteSwiftPackageReference "honeybadger-cocoa" */;
 			productName = Honeybadger;
+		};
+		DBF100112F1000010000001 /* BridgeComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DBF100032F1000010000001 /* XCRemoteSwiftPackageReference "bridge-components" */;
+			productName = BridgeComponents;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
