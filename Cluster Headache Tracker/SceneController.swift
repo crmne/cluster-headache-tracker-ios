@@ -149,7 +149,7 @@ private extension SceneController {
         isAuthenticationRoutePending = false
         let selectedIndex = tabBarController?.selectedIndex
 
-        let rebuild = { [weak self] in
+        let rebuild: () -> Void = { [weak self] in
             self?.installRootController(selectedIndex: selectedIndex)
         }
 

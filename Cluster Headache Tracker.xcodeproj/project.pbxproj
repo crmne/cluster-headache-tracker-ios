@@ -613,8 +613,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hotwired/hotwire-native-ios";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		DBF100032F1000010000001 /* XCRemoteSwiftPackageReference "bridge-components" */ = {
