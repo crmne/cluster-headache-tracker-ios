@@ -6,11 +6,11 @@ final class SceneController: UIResponder {
     var window: UIWindow?
 
     private var tabBarController: AppTabBarController?
+    private var notificationObservers = [NSObjectProtocol]()
     private var isAuthenticationRoutePending = false
-    private var signOutObserver: NSObjectProtocol?
 
     deinit {
-        signOutObserver.map(NotificationCenter.default.removeObserver)
+        notificationObservers.forEach(NotificationCenter.default.removeObserver)
     }
 }
 
@@ -22,7 +22,7 @@ extension SceneController: UIWindowSceneDelegate {
         self.window = window
 
         installRootController(selectedIndex: nil)
-        observeSignOut()
+        observeNotifications()
 
         window.makeKeyAndVisible()
     }
@@ -109,6 +109,20 @@ private extension SceneController {
         window?.rootViewController = controller
     }
 
+    func observeNotifications() {
+        guard notificationObservers.isEmpty else { return }
+
+        let signOutObserver = NotificationCenter.default.addObserver(
+            forName: .clusterHeadacheTrackerSignOutRequested,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleSignOutRequested()
+        }
+
+        notificationObservers.append(signOutObserver)
+    }
+
     func presentAuthentication(after delay: TimeInterval = 0) {
         guard let tabBarController else { return }
         guard !isAuthenticationRoutePending, !authenticationIsVisible else { return }
@@ -146,20 +160,12 @@ private extension SceneController {
         }
     }
 
-    func observeSignOut() {
-        signOutObserver = NotificationCenter.default.addObserver(
-            forName: .appSignOutRequested,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.handleSignOut()
-        }
-    }
-
-    func handleSignOut() {
+    func handleSignOutRequested() {
         isAuthenticationRoutePending = false
-        installRootController(selectedIndex: 0)
-        presentAuthentication()
+        let selectedIndex = tabBarController?.selectedIndex
+
+        installRootController(selectedIndex: selectedIndex)
+        presentAuthentication(after: 0.35)
     }
 
     func cleanupUnauthorizedFailure() {
