@@ -302,10 +302,12 @@
 		DB8561242CC28607003309C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_BUILD_NUMBER = 20101;
+				APP_VERSION = 2.1.1;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = JPL7999US3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cluster Headache Tracker/Info.plist";
@@ -319,7 +321,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = "$(APP_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.paolino.Cluster-Headache-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -335,10 +337,12 @@
 		DB8561252CC28607003309C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_BUILD_NUMBER = 20101;
+				APP_VERSION = 2.1.1;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = JPL7999US3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cluster Headache Tracker/Info.plist";
@@ -352,7 +356,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = "$(APP_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.paolino.Cluster-Headache-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

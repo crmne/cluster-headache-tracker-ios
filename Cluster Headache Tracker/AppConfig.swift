@@ -73,12 +73,8 @@ enum AppConfig {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
     }
 
-    static var appVersionIdentifier: String {
-        "\(appVersion).\(buildNumber)"
-    }
-
     static var applicationUserAgentPrefix: String {
-        "ClusterHeadacheTracker/\(appVersionIdentifier);"
+        "ClusterHeadacheTracker; platform=ios; version=\(appVersion); build=\(buildNumber);"
     }
 
     static func isAuthenticationURL(_ url: URL) -> Bool {

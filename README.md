@@ -12,6 +12,13 @@ The main reason for creating this iOS app is to increase accessibility and visib
 - 📊 View and interact with headache logs and charts
 - 🔒 Secure authentication and data storage (handled by the web app)
 
+## 🔢 Versioning
+
+- Local builds fall back to the checked-in app version in the Xcode project
+- Release archives can override `APP_VERSION` and `APP_BUILD_NUMBER` at build time
+- Example: `xcodebuild archive APP_VERSION=2.1.1 APP_BUILD_NUMBER=20101`
+- `Scripts/archive-release.sh v2.1.1` derives those values from the tag automatically
+
 ## 🛠 Requirements
 
 - iOS 18.0+
