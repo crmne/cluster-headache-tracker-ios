@@ -27,7 +27,7 @@ struct NativeShellTests {
         #expect(WebViewFactory.pageZoom(for: .large) == 1)
         #expect(WebViewFactory.pageZoom(for: .extraSmall) < 1)
         #expect(WebViewFactory.pageZoom(for: .extraExtraExtraLarge) > WebViewFactory.pageZoom(for: .extraLarge))
-        #expect(WebViewFactory.pageZoom(for: .accessibilityExtraExtraExtraLarge) == 1.5)
+        #expect(WebViewFactory.pageZoom(for: .accessibilityExtraExtraExtraLarge) == 1.2)
     }
 
     @Test func tabsCoverTheSignedInWebNavigation() {

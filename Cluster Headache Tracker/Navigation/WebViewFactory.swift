@@ -24,20 +24,20 @@ enum WebViewFactory {
         return webView
     }
 
-    /// Text size steps roughly follow the body text style scale, capped so that
-    /// layouts built for phones remain usable at accessibility sizes.
+    /// Text size steps follow the body text style scale, capped at 1.2 so the
+    /// page still gets a viewport of at least ~320 CSS pixels on small phones;
+    /// beyond that the web layouts start to clip.
     static func pageZoom(for category: UIContentSizeCategory) -> CGFloat {
         switch category {
-        case .extraSmall: 0.85
-        case .small: 0.9
-        case .medium: 0.95
+        case .extraSmall: 0.88
+        case .small: 0.92
+        case .medium: 0.96
         case .large: 1
-        case .extraLarge: 1.1
-        case .extraExtraLarge: 1.2
-        case .extraExtraExtraLarge: 1.3
-        case .accessibilityMedium: 1.4
-        case .accessibilityLarge, .accessibilityExtraLarge,
-             .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge: 1.5
+        case .extraLarge: 1.06
+        case .extraExtraLarge: 1.12
+        case .extraExtraExtraLarge: 1.16
+        case .accessibilityMedium, .accessibilityLarge, .accessibilityExtraLarge,
+             .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge: 1.2
         default: 1
         }
     }
