@@ -19,7 +19,7 @@ repos:
         entry: swiftformat
         language: system
         files: \.swift$
-        args: [--swiftversion, "5.9"]
+        args: [--swiftversion, "6.0"]
         
       # Check for trailing whitespace
       - id: trailing-whitespace-fix
@@ -63,7 +63,7 @@ repos:
       # Run unit tests before push
       - id: unit-tests
         name: Run Unit Tests
-        entry: xcodebuild test -scheme "Cluster Headache Tracker" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' -quiet
+        entry: xcodebuild test -scheme "Cluster Headache Tracker" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' -quiet
         language: system
         pass_filenames: false
         stages: [pre-push]

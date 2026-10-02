@@ -1,69 +1,57 @@
 import UIKit
 
 enum AppPalette {
-    static let primary = UIColor(hex: "#4F46E5")!
-    static let secondary = UIColor(hex: "#10B981")!
-    static let accent = UIColor(hex: "#F59E0B")!
-    static let info = UIColor(hex: "#3B82F6")!
-    static let chromeBackground = UIColor.systemBackground
-    static let chromeBorder = UIColor.separator
-    static let unselectedTab = UIColor.secondaryLabel
+    static let primary = UIColor(light: "#4F46E5", dark: "#818CF8")
+    static let secondary = UIColor(light: "#10B981", dark: "#34D399")
+    static let accent = UIColor(light: "#F59E0B", dark: "#FBBF24")
+    static let info = UIColor(light: "#3B82F6", dark: "#60A5FA")
 }
 
+/// Keeps UIKit chrome as close to the system look as possible: on iOS 26+ the
+/// bars use Liquid Glass untouched, earlier versions get the default translucent
+/// material. Only the tint carries the product colour.
+@MainActor
 enum AppAppearance {
     static func configure() {
-        configureNavigationBar()
-        configureTabBar()
+        UINavigationBar.appearance().tintColor = AppPalette.primary
+        UITabBar.appearance().tintColor = AppPalette.primary
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = AppPalette.primary
+
+        if #unavailable(iOS 26.0) {
+            configureLegacyBars()
+        }
     }
 
-    private static func configureNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = AppPalette.chromeBackground
-        appearance.shadowColor = AppPalette.chromeBorder
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
-
-        let buttonAppearance = UIBarButtonItemAppearance()
-        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: AppPalette.primary]
-        appearance.buttonAppearance = buttonAppearance
-        appearance.doneButtonAppearance = buttonAppearance
+    private static func configureLegacyBars() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithDefaultBackground()
 
         let navigationBar = UINavigationBar.appearance()
-        navigationBar.standardAppearance = appearance
-        navigationBar.scrollEdgeAppearance = appearance
-        navigationBar.compactAppearance = appearance
-        navigationBar.tintColor = AppPalette.primary
-    }
+        navigationBar.standardAppearance = navigationBarAppearance
+        navigationBar.compactAppearance = navigationBarAppearance
 
-    private static func configureTabBar() {
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = AppPalette.chromeBackground
-        appearance.shadowColor = AppPalette.chromeBorder
-
-        let stacked = appearance.stackedLayoutAppearance
-        stacked.normal.iconColor = AppPalette.unselectedTab
-        stacked.normal.titleTextAttributes = [.foregroundColor: AppPalette.unselectedTab]
-        stacked.selected.iconColor = AppPalette.primary
-        stacked.selected.titleTextAttributes = [.foregroundColor: UIColor.label]
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithDefaultBackground()
 
         let tabBar = UITabBar.appearance()
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = appearance
-        tabBar.tintColor = AppPalette.primary
-        tabBar.unselectedItemTintColor = AppPalette.unselectedTab
+        tabBar.standardAppearance = tabBarAppearance
+        tabBar.scrollEdgeAppearance = tabBarAppearance
     }
 }
 
 private extension UIColor {
-    convenience init?(hex: String) {
-        let sanitized = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        guard sanitized.count == 6,
-              let value = Int(sanitized, radix: 16)
-        else {
-            return nil
+    convenience init(light: String, dark: String) {
+        let lightColor = UIColor(hex: light)
+        let darkColor = UIColor(hex: dark)
+
+        self.init { traits in
+            traits.userInterfaceStyle == .dark ? darkColor : lightColor
         }
+    }
+
+    convenience init(hex: String) {
+        let sanitized = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let value = Int(sanitized, radix: 16) ?? 0
 
         self.init(
             red: CGFloat((value >> 16) & 0xFF) / 255,

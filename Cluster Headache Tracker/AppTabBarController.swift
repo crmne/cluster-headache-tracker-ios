@@ -7,34 +7,23 @@ final class AppTabBarController: HotwireTabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 18.0, *) {
-            mode = .tabBar
+        // Keep a bottom tab bar on iPad too instead of the floating sidebar.
+        mode = .tabBar
+
+        if #available(iOS 26.0, *) {
+            tabBarMinimizeBehavior = .onScrollDown
         }
+    }
+
+    func selectTab(withID identifier: String) {
+        guard let tab = tabs.first(where: { $0.identifier == identifier }) else { return }
+        selectedTab = tab
     }
 }
 
 extension AppTabBarController {
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        guard let viewControllers = tabBarController.viewControllers,
-              let index = viewControllers.firstIndex(of: viewController)
-        else {
-            return true
-        }
-
-        return handleSelection(forIndex: index)
-    }
-
-    @available(iOS 18.0, *)
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelectTab tab: UITab) -> Bool {
-        guard let index = AppTabs.all.firstIndex(where: { $0.id == tab.identifier }) else {
-            return true
-        }
-
-        return handleSelection(forIndex: index)
-    }
-
-    private func handleSelection(forIndex index: Int) -> Bool {
-        guard index == AppTabs.newTabIndex else {
+    func tabBarController(_: UITabBarController, shouldSelectTab tab: UITab) -> Bool {
+        guard tab.identifier == AppTabs.newTabID else {
             return true
         }
 

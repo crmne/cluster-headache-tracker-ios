@@ -1,6 +1,7 @@
 import BridgeComponents
 import Honeybadger
-import HotwireNative
+// Hotwire.config is a mutable static from a Swift 5 module; it is only touched on the main thread.
+@preconcurrency import HotwireNative
 import UIKit
 
 enum EnvironmentConfig {
@@ -31,7 +32,8 @@ private extension AppDelegate {
 
         Honeybadger.configure(
             apiKey: apiKey,
-            environment: AppConfig.isDebug ? "development" : "production"
+            environment: AppConfig.isDebug ? "development" : "production",
+            revision: "\(AppConfig.appVersion) (\(AppConfig.buildNumber))"
         )
 
         Honeybadger.setContext(context: [
@@ -50,11 +52,27 @@ private extension AppDelegate {
 
         Hotwire.config.applicationUserAgentPrefix = AppConfig.applicationUserAgentPrefix
         Hotwire.config.backButtonDisplayMode = .minimal
-        Hotwire.config.showDoneButtonOnModals = true
         Hotwire.config.hideTabBarWhenPushed = true
+        Hotwire.config.animateReplaceActions = true
+        Hotwire.config.defaultViewController = { url in
+            MainActor.assumeIsolated { WebViewController(url: url) }
+        }
+        Hotwire.config.defaultNavigationController = {
+            MainActor.assumeIsolated { NavigationController() }
+        }
+        Hotwire.config.makeCustomWebView = { configuration in
+            MainActor.assumeIsolated { WebViewFactory.makeWebView(configuration: configuration) }
+        }
         #if DEBUG
             Hotwire.config.debugLoggingEnabled = true
         #endif
+
+        Hotwire.registerRouteDecisionHandlers([
+            DocumentRouteDecisionHandler(),
+            AppNavigationRouteDecisionHandler(),
+            SafariViewControllerRouteDecisionHandler(),
+            SystemNavigationRouteDecisionHandler(),
+        ])
 
         Hotwire.registerBridgeComponents(bridgeComponents)
     }
@@ -65,6 +83,8 @@ private extension AppDelegate {
         } + [
             CompatibleButtonComponent.self,
             CompatibleShareComponent.self,
+            WidgetStatusComponent.self,
+            DownloadComponent.self,
         ]
     }
 }

@@ -2,8 +2,9 @@ import Foundation
 
 enum AppConfig {
     static let productionBaseURL = URL(string: "https://clusterheadachetracker.com")!
-    static let localBaseURL = URL(string: "http://192.168.8.220:3000")!
 
+    /// Set `CLUSTER_HEADACHE_TRACKER_BASE_URL` in the scheme's environment to
+    /// point the app at a local Rails server (local network HTTP is allowed).
     private static let baseURLOverrideEnvironmentKey = "CLUSTER_HEADACHE_TRACKER_BASE_URL"
 
     static var baseURL: URL {
@@ -13,11 +14,7 @@ enum AppConfig {
             return url
         }
 
-        #if DEBUG
-            return productionBaseURL
-        #else
-            return productionBaseURL
-        #endif
+        return productionBaseURL
     }
 
     static var bundledPathConfigurationURL: URL {
@@ -79,6 +76,12 @@ enum AppConfig {
 
     static func isAuthenticationURL(_ url: URL) -> Bool {
         authenticationPaths.contains(url.path)
+    }
+
+    static let signOutPath = "/users/sign_out"
+
+    static func isSignOutURL(_ url: URL) -> Bool {
+        url.path == signOutPath
     }
 
     static func isCompatibilityAuthenticationRefreshURL(_ url: URL) -> Bool {

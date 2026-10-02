@@ -1,0 +1,11 @@
+// Build settings for the app target.
+//
+// HONEYBADGER_API_KEY is written into Info.plist and read at launch. It stays
+// empty (Honeybadger disabled) unless Configuration/Secrets.xcconfig sets it.
+// That file is git-ignored: copy Secrets.xcconfig.example locally, and Xcode
+// Cloud creates it in ci_scripts/ci_post_clone.sh from the HONEYBADGER_API_KEY
+// secret environment variable.
+
+HONEYBADGER_API_KEY =
+
+#include? "Secrets.xcconfig"
