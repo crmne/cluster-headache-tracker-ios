@@ -1,6 +1,6 @@
 import BridgeComponents
 import Honeybadger
-import HotwireNative
+@preconcurrency import HotwireNative
 import UIKit
 
 enum EnvironmentConfig {
@@ -31,7 +31,8 @@ private extension AppDelegate {
 
         Honeybadger.configure(
             apiKey: apiKey,
-            environment: AppConfig.isDebug ? "development" : "production"
+            environment: AppConfig.isDebug ? "development" : "production",
+            revision: "\(AppConfig.appVersion) (\(AppConfig.buildNumber))"
         )
 
         Honeybadger.setContext(context: [

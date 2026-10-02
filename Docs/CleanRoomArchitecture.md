@@ -22,12 +22,10 @@ This document is the implementation contract for the rewrite.
 
 ## Verified Dependency State
 
-- Hotwire Native iOS official docs currently list `1.2.2` as the current iOS release.
-- The local `../hotwire-native-ios` checkout is at `1.3.0-beta-19`.
-- Local `../bridge-components` is `v0.13.2`.
-- Local `../bridge-components-pro` is `v0.13.0`.
-
-Because the user explicitly asked to use the parent-folder checkouts, the project should be wired to the local packages instead of the previously pinned remote package references.
+- Hotwire Native iOS `1.3.1` (remote package, up to next major).
+- Bridge Components `v0.14.0` (remote package, up to next minor; supports Hotwire Native 1.2.x and 1.3.x).
+- Honeybadger Cocoa `2.0.0` (remote package, up to next major; requires iOS 16+).
+- Swift 6 language mode, iOS 18.0 deployment target.
 
 ## Product Model
 

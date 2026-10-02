@@ -8,10 +8,6 @@ final class SceneController: UIResponder {
     private var tabBarController: AppTabBarController?
     private var notificationObservers = [NSObjectProtocol]()
     private var isAuthenticationRoutePending = false
-
-    deinit {
-        notificationObservers.forEach(NotificationCenter.default.removeObserver)
-    }
 }
 
 extension SceneController: UIWindowSceneDelegate {
@@ -28,7 +24,7 @@ extension SceneController: UIWindowSceneDelegate {
     }
 }
 
-extension SceneController: NavigatorDelegate {
+extension SceneController: @preconcurrency NavigatorDelegate {
     func handle(proposal: VisitProposal, from navigator: Navigator) -> ProposalResult {
         if AppConfig.isCompatibilityAuthenticationRefreshURL(proposal.url) {
             rebuildAfterAuthentication(using: navigator)
@@ -44,11 +40,8 @@ extension SceneController: NavigatorDelegate {
         }
     }
 
-    func visitableDidFailRequest(_ visitable: any Visitable, error: any Error, retryHandler: RetryBlock?) {
-        if let turboError = error as? TurboError,
-           case let .http(statusCode) = turboError,
-           statusCode == 401
-        {
+    func visitableDidFailRequest(_ visitable: any Visitable, error: HotwireNativeError, retryHandler: RetryBlock?) {
+        if error.statusCode == 401 {
             guard !authenticationIsVisible else {
                 return
             }
@@ -62,19 +55,8 @@ extension SceneController: NavigatorDelegate {
         Honeybadger.notify(error: error, context: context)
 
         if let errorPresenter = visitable as? ErrorPresenter {
-            errorPresenter.presentError(error) {
-                retryHandler?()
-            }
-            return
+            errorPresenter.presentError(error, retryHandler: retryHandler)
         }
-
-        let alert = UIAlertController(
-            title: "Visit failed",
-            message: error.localizedDescription,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        tabBarController?.activeNavigator.present(alert, animated: true)
     }
 }
 
@@ -117,7 +99,9 @@ private extension SceneController {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.handleSignOutRequested()
+            MainActor.assumeIsolated {
+                self?.handleSignOutRequested()
+            }
         }
 
         notificationObservers.append(signOutObserver)
@@ -129,15 +113,11 @@ private extension SceneController {
 
         isAuthenticationRoutePending = true
 
-        let route = { [weak tabBarController] in
-            guard let tabBarController else { return }
-            tabBarController.activeNavigator.route(AppConfig.signInURL)
-        }
-
-        if delay == 0 {
-            DispatchQueue.main.async(execute: route)
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: route)
+        Task { @MainActor [weak tabBarController] in
+            if delay > 0 {
+                try? await Task.sleep(for: .seconds(delay))
+            }
+            tabBarController?.activeNavigator.route(AppConfig.signInURL)
         }
     }
 
@@ -172,7 +152,7 @@ private extension SceneController {
         tabBarController?.activeNavigator.pop(animated: false)
     }
 
-    func errorContext(for visitable: any Visitable, error: any Error) -> [String: String] {
+    func errorContext(for visitable: any Visitable, error: HotwireNativeError) -> [String: String] {
         [
             "source": "SceneController",
             "url": visitableURLString(for: visitable),

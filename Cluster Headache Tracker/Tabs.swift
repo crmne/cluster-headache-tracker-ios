@@ -2,6 +2,7 @@ import Foundation
 import HotwireNative
 import UIKit
 
+@MainActor
 enum AppTabs {
     static let newTabIndex = 2
 

@@ -22,8 +22,8 @@ The main reason for creating this iOS app is to increase accessibility and visib
 ## 🛠 Requirements
 
 - iOS 18.0+
-- Xcode 15.0+
-- Swift 5.0+
+- Xcode 26.0+ (developed with Xcode 27)
+- Swift 6 language mode
 
 ## 📲 Installation
 

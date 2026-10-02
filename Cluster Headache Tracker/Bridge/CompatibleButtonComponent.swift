@@ -59,7 +59,8 @@ final class CompatibleButtonComponent: BridgeComponent {
         case "Print":
             printCurrentPage()
         case "Sign Out":
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(350))
                 NotificationCenter.default.post(name: .clusterHeadacheTrackerSignOutRequested, object: nil)
             }
         default:

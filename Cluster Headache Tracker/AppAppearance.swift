@@ -10,6 +10,7 @@ enum AppPalette {
     static let unselectedTab = UIColor.secondaryLabel
 }
 
+@MainActor
 enum AppAppearance {
     static func configure() {
         configureNavigationBar()

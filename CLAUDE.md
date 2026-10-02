@@ -30,7 +30,7 @@ open "Cluster Headache Tracker.xcodeproj"
 xcodebuild -scheme "Cluster Headache Tracker" -configuration Debug -sdk iphonesimulator
 
 # Run tests
-xcodebuild test -scheme "Cluster Headache Tracker" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 15'
+xcodebuild test -scheme "Cluster Headache Tracker" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
 ### Local Development Setup
@@ -69,7 +69,7 @@ To add new native features accessible from the web app:
 ## Deployment Notes
 
 - Bundle ID: `me.paolino.Cluster-Headache-Tracker`
-- Minimum iOS: 15.6
+- Minimum iOS: 18.0
 - The app uses Swift Package Manager for dependencies (no CocoaPods/Carthage)
 - Production URL is hardcoded in `AppConfig.swift` for release builds
 
