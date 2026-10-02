@@ -39,7 +39,7 @@ final class CompatibleButtonComponent: BridgeComponent {
 
         let item = UIBarButtonItem(
             title: data.title,
-            image: data.image.flatMap { UIImage(systemName: $0) },
+            image: (data.image ?? data.resolvedNativeAction?.defaultImage).flatMap { UIImage(systemName: $0) },
             primaryAction: action
         )
         item.tintColor = Bridgework.color("Button", hex: data.colorCode)
@@ -59,13 +59,17 @@ final class CompatibleButtonComponent: BridgeComponent {
     private func handleTap(for data: MessageData, replyEvent: String) {
         reply(to: replyEvent)
 
-        if data.isPrint {
+        switch data.resolvedNativeAction {
+        case .print:
             printCurrentPage()
-        } else if data.isSignOut {
+        case .signOut:
             Task { @MainActor in
                 try? await Task.sleep(for: .milliseconds(350))
                 NotificationCenter.default.post(name: .signOutRequested, object: nil)
             }
+        case .sponsor, nil:
+            // The reply makes the web follow the sponsor link, which opens externally.
+            break
         }
     }
 
@@ -116,29 +120,51 @@ private extension CompatibleButtonComponent {
         case left
         case right
     }
+}
+
+extension CompatibleButtonComponent {
+    /// Buttons the app handles natively, named by the web's language-independent
+    /// `nativeAction`.
+    enum NativeAction: String, Decodable {
+        case print
+        case signOut = "sign-out"
+        case sponsor
+
+        var defaultImage: String? {
+            switch self {
+            case .print: "printer"
+            case .signOut: nil
+            case .sponsor: "heart"
+            }
+        }
+    }
 
     struct MessageData: Decodable {
         let title: String
         let image: String?
         let colorCode: String?
+        let nativeAction: String?
 
-        /// The print page's button is identified by its SF Symbol, falling back
-        /// to the English title older server builds send.
-        var isPrint: Bool {
-            image == "printer" || title == "Print"
-        }
-
-        /// The account page's sign out button. Sign out is also detected from the
-        /// form submission (see `SceneController`), which keeps working once the
-        /// title is translated.
-        var isSignOut: Bool {
-            title == "Sign Out"
+        /// `nativeAction` first; older servers only send English titles (and the
+        /// printer symbol). Sign out is additionally detected from the sign out
+        /// form submission in `SceneController`.
+        var resolvedNativeAction: NativeAction? {
+            if let nativeAction, let action = NativeAction(rawValue: nativeAction) {
+                return action
+            }
+            switch title {
+            case "Print": return .print
+            case "Sign Out": return .signOut
+            case "Sponsor": return .sponsor
+            default: return image == "printer" ? .print : nil
+            }
         }
 
         enum CodingKeys: String, CodingKey {
             case title
             case image = "iosImage"
             case colorCode = "color"
+            case nativeAction
         }
     }
 }

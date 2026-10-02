@@ -36,7 +36,11 @@
       "patterns": [
         "/headache_logs/new(\\?.*)?$",
         "/headache_logs/.*/edit$",
-        "/current_attack$"
+        "/current_attack$",
+        "/medications/new$",
+        "/medications/.*/edit$",
+        "/medication_doses/new$",
+        "/medication_doses/.*/edit$"
       ],
       "properties": {
         "context": "modal",
