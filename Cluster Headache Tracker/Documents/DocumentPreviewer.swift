@@ -90,7 +90,7 @@ final class DocumentPreviewer: NSObject {
     }
 }
 
-extension DocumentPreviewer: @preconcurrency QLPreviewControllerDataSource {
+extension DocumentPreviewer: QLPreviewControllerDataSource {
     func numberOfPreviewItems(in _: QLPreviewController) -> Int {
         previewURL == nil ? 0 : 1
     }

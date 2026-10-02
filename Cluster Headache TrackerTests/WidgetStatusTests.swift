@@ -49,6 +49,28 @@ struct WidgetStatusTests {
         #expect(status.updatedAt == now)
     }
 
+    @Test func parsesThePatientsUTCOffset() {
+        let startedAt = WidgetStatus.parseDate("2026-10-02T11:44:00+02:00")
+        #expect(startedAt == WidgetStatus.parseDate("2026-10-02T09:44:00Z"))
+
+        var berlin = Calendar(identifier: .gregorian)
+        berlin.timeZone = TimeZone(identifier: "Europe/Berlin")!
+        #expect(berlin.component(.hour, from: startedAt!) == 11)
+    }
+
+    @Test func flagsStartTimesInTheFuture() {
+        let now = date("2026-10-02T13:42:00Z")
+        var snapshot = status(updatedAt: now)
+        snapshot.ongoing = true
+
+        snapshot.startedAt = date("2026-10-02T14:40:00+02:00")
+        #expect(!snapshot.hasFutureTimestamps(relativeTo: now))
+
+        // Wall-clock time labelled as UTC lands two hours in the future.
+        snapshot.startedAt = date("2026-10-02T14:40:00Z")
+        #expect(snapshot.hasFutureTimestamps(relativeTo: now))
+    }
+
     @Test func countsAttackFreeDaysFromTheLastAttack() {
         let snapshot = status(lastAttackAt: date("2026-09-28T23:00:00Z"), attackFreeDays: 3, updatedAt: date("2026-10-02T08:00:00Z"))
 

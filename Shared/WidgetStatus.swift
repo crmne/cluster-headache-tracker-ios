@@ -38,6 +38,12 @@ struct WidgetStatus: Codable, Equatable, Sendable {
 }
 
 extension WidgetStatus {
+    /// A start time in the future means the server sent a wall-clock time
+    /// with the wrong offset; such a snapshot would make the timers count down.
+    func hasFutureTimestamps(relativeTo date: Date, tolerance: TimeInterval = 60) -> Bool {
+        [startedAt, lastAttackAt].compactMap { $0 }.contains { $0.timeIntervalSince(date) > tolerance }
+    }
+
     static let supportedLocales: Set<String> = ["en", "de", "it", "es"]
 
     /// Locale for widget text: the language chosen in the web app.

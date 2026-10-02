@@ -47,12 +47,19 @@ struct AttackStatusWidget: Widget {
 }
 
 struct AttackStatusView: View {
-    @Environment(\.widgetFamily) private var family
+    @Environment(\.widgetFamily) private var environmentFamily
     let entry: AttackStatusEntry
+    /// Lets snapshot renders pick a family; widgets use the environment.
+    var familyOverride: WidgetFamily?
+
+    private var family: WidgetFamily {
+        familyOverride ?? environmentFamily
+    }
 
     var body: some View {
         content
             .environment(\.locale, entry.status?.resolvedLocale ?? .current)
+            .environment(\.widgetLanguage, entry.status?.locale)
     }
 
     @ViewBuilder
@@ -73,7 +80,8 @@ struct AttackStatusView: View {
 
 // MARK: - Home Screen
 
-private struct SmallStatusView: View {
+private struct SmallStatusView: View, WidgetLocalized {
+    @Environment(\.widgetLanguage) var language
     let status: WidgetStatus
     let date: Date
 
@@ -82,9 +90,9 @@ private struct SmallStatusView: View {
             StatusHeadline(status: status, date: date)
             Spacer(minLength: 0)
             if status.ongoing {
-                ActionLabel(title: "End attack", systemImage: "stop.circle.fill")
+                ActionLabel(title: tr("End attack"), systemImage: "stop.circle.fill")
             } else {
-                ActionLabel(title: "Log attack", systemImage: "plus.circle.fill")
+                ActionLabel(title: tr("Log attack"), systemImage: "plus.circle.fill")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -92,7 +100,8 @@ private struct SmallStatusView: View {
     }
 }
 
-private struct MediumStatusView: View {
+private struct MediumStatusView: View, WidgetLocalized {
+    @Environment(\.widgetLanguage) var language
     let status: WidgetStatus
     let date: Date
 
@@ -101,7 +110,7 @@ private struct MediumStatusView: View {
             VStack(alignment: .leading, spacing: 4) {
                 StatusHeadline(status: status, date: date)
                 Spacer(minLength: 0)
-                Text("Today: \(status.attacksToday(at: date)) attacks")
+                Text(tr("Today: \(status.attacksToday(at: date)) attacks"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -109,13 +118,13 @@ private struct MediumStatusView: View {
 
             VStack(spacing: 8) {
                 Link(destination: DeepLink.quickLog.appURL) {
-                    ActionLabel(title: "Log attack", systemImage: "plus.circle.fill")
+                    ActionLabel(title: tr("Log attack"), systemImage: "plus.circle.fill")
                 }
                 Link(destination: DeepLink.currentAttack.appURL) {
                     if status.ongoing {
-                        ActionLabel(title: "End attack", systemImage: "stop.circle.fill")
+                        ActionLabel(title: tr("End attack"), systemImage: "stop.circle.fill")
                     } else {
-                        ActionLabel(title: "Start now", systemImage: "timer")
+                        ActionLabel(title: tr("Start now"), systemImage: "timer")
                     }
                 }
             }
@@ -123,13 +132,14 @@ private struct MediumStatusView: View {
     }
 }
 
-private struct StatusHeadline: View {
+private struct StatusHeadline: View, WidgetLocalized {
+    @Environment(\.widgetLanguage) var language
     let status: WidgetStatus
     let date: Date
 
     var body: some View {
         if status.ongoing, let startedAt = status.startedAt {
-            Label("Attack ongoing", systemImage: "waveform.path.ecg")
+            Label(tr("Attack ongoing"), systemImage: "waveform.path.ecg")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.red)
             Text(startedAt, style: .timer)
@@ -138,21 +148,18 @@ private struct StatusHeadline: View {
                 .minimumScaleFactor(0.6)
         } else {
             let days = status.attackFreeDays(at: date)
-            Label("Attack-free", systemImage: "leaf.fill")
+            Label(tr("Attack-free"), systemImage: "leaf.fill")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.green)
-            Text(days, format: .number)
-                .font(.system(size: 44, weight: .bold, design: .rounded))
+            Text(tr("\(days) days"))
+                .font(.system(.title, design: .rounded, weight: .bold))
                 .minimumScaleFactor(0.6)
-            Text("\(days) days")
-                .font(.caption)
-                .foregroundStyle(.secondary)
         }
     }
 }
 
 private struct ActionLabel: View {
-    let title: LocalizedStringKey
+    let title: String
     let systemImage: String
 
     var body: some View {
@@ -168,13 +175,14 @@ private struct ActionLabel: View {
     }
 }
 
-private struct SignedOutView: View {
+private struct SignedOutView: View, WidgetLocalized {
+    @Environment(\.widgetLanguage) var language
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Image(systemName: "brain.head.profile")
                 .font(.title2)
                 .foregroundStyle(.tint)
-            Text("Open the app to sign in")
+            Text(tr("Open the app to sign in"))
                 .font(.subheadline.weight(.semibold))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -212,21 +220,22 @@ private struct CircularStatusView: View {
     }
 }
 
-private struct RectangularStatusView: View {
+private struct RectangularStatusView: View, WidgetLocalized {
+    @Environment(\.widgetLanguage) var language
     let status: WidgetStatus
     let date: Date
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             if status.ongoing, let startedAt = status.startedAt {
-                Label("Attack ongoing", systemImage: "waveform.path.ecg")
+                Label(tr("Attack ongoing"), systemImage: "waveform.path.ecg")
                     .font(.headline)
                 Text(startedAt, style: .timer)
                     .font(.title3.monospacedDigit())
             } else {
-                Label("Attack-free", systemImage: "leaf.fill")
+                Label(tr("Attack-free"), systemImage: "leaf.fill")
                     .font(.headline)
-                Text("\(status.attackFreeDays(at: date)) days")
+                Text(tr("\(status.attackFreeDays(at: date)) days"))
                     .font(.title3)
             }
         }
@@ -235,7 +244,8 @@ private struct RectangularStatusView: View {
     }
 }
 
-private struct InlineStatusView: View {
+private struct InlineStatusView: View, WidgetLocalized {
+    @Environment(\.widgetLanguage) var language
     let status: WidgetStatus
     let date: Date
 
@@ -247,8 +257,24 @@ private struct InlineStatusView: View {
                 Image(systemName: "waveform.path.ecg")
             }
         } else {
-            Label("\(status.attackFreeDays(at: date)) days attack-free", systemImage: "leaf.fill")
+            Label(tr("\(status.attackFreeDays(at: date)) days attack-free"), systemImage: "leaf.fill")
         }
+    }
+}
+
+extension EnvironmentValues {
+    /// Language of the web app, used for widget text.
+    @Entry var widgetLanguage: String?
+}
+
+@MainActor
+private protocol WidgetLocalized {
+    var language: String? { get }
+}
+
+private extension WidgetLocalized {
+    func tr(_ key: String.LocalizationValue) -> String {
+        Localization.string(key, language: language)
     }
 }
 

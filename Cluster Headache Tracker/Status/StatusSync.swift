@@ -37,7 +37,7 @@ enum QuickActions {
     }
 
     static func items(for status: WidgetStatus?) -> [UIApplicationShortcutItem] {
-        let bundle = Bundle.main.localizationBundle(for: status?.locale)
+        let bundle = Localization.bundle(for: status?.locale)
 
         let logAttack = UIApplicationShortcutItem(
             type: DeepLink.quickLog.shortcutType,
@@ -104,19 +104,5 @@ enum AttackLiveActivity {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
         }
-    }
-}
-
-extension Bundle {
-    /// The `.lproj` bundle for a language code, so native strings can follow
-    /// the language picked in the web app rather than the device language.
-    func localizationBundle(for language: String?) -> Bundle {
-        guard let language,
-              let path = path(forResource: language, ofType: "lproj"),
-              let bundle = Bundle(path: path)
-        else {
-            return self
-        }
-        return bundle
     }
 }

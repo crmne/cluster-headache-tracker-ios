@@ -10,6 +10,20 @@ final class WebViewController: HotwireWebViewController {
         }
     }
 
+    /// A web page renders with its scroll view at offset zero, which collapses
+    /// the large title; start root screens fully expanded instead.
+    override func visitableDidRender() {
+        super.visitableDidRender()
+
+        guard navigationItem.largeTitleDisplayMode == .always,
+              let scrollView = visitableView.webView?.scrollView,
+              scrollView.contentOffset.y <= 0
+        else {
+            return
+        }
+        scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.adjustedContentInset.top), animated: false)
+    }
+
     /// Modal sheets get a system close button on the leading side so the trailing
     /// side stays free for the form's primary action (bridge `button` component).
     private func addCloseButton() {

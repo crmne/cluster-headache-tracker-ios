@@ -5,14 +5,14 @@ import WidgetKit
 struct AttackLiveActivityWidget: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: AttackActivityAttributes.self) { context in
-            LockScreenAttackView(startedAt: context.state.startedAt)
+            LockScreenAttackView(startedAt: context.state.startedAt, language: context.attributes.localeIdentifier)
                 .environment(\.locale, Locale(identifier: context.attributes.localeIdentifier))
                 .activityBackgroundTint(nil)
                 .widgetURL(DeepLink.currentAttack.appURL)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Label("Attack", systemImage: "waveform.path.ecg")
+                    Label(Localization.string("Attack", language: context.attributes.localeIdentifier), systemImage: "waveform.path.ecg")
                         .font(.headline)
                         .foregroundStyle(.red)
                 }
@@ -24,7 +24,7 @@ struct AttackLiveActivityWidget: Widget {
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     Link(destination: DeepLink.currentAttack.appURL) {
-                        Label("End attack", systemImage: "stop.circle.fill")
+                        Label(Localization.string("End attack", language: context.attributes.localeIdentifier), systemImage: "stop.circle.fill")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
@@ -48,13 +48,14 @@ struct AttackLiveActivityWidget: Widget {
     }
 }
 
-private struct LockScreenAttackView: View {
+struct LockScreenAttackView: View {
     let startedAt: Date
+    var language: String?
 
     var body: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 2) {
-                Label("Attack ongoing", systemImage: "waveform.path.ecg")
+                Label(Localization.string("Attack ongoing", language: language), systemImage: "waveform.path.ecg")
                     .font(.headline)
                     .foregroundStyle(.red)
                 Text(startedAt, style: .timer)
@@ -63,7 +64,7 @@ private struct LockScreenAttackView: View {
             }
             Spacer()
             Link(destination: DeepLink.currentAttack.appURL) {
-                Label("End attack", systemImage: "stop.circle.fill")
+                Label(Localization.string("End attack", language: language), systemImage: "stop.circle.fill")
                     .font(.headline)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 10)

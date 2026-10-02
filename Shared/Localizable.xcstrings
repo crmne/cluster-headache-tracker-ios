@@ -3,6 +3,7 @@
   "strings": {
     "%lld days": {
       "comment": "Number of attack-free days",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "variations": {
@@ -80,6 +81,7 @@
     },
     "%lld days attack-free": {
       "comment": "Lock Screen inline widget",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "variations": {
@@ -180,6 +182,7 @@
     },
     "Attack": {
       "comment": "Dynamic Island label for an ongoing attack",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -203,6 +206,7 @@
     },
     "Attack ongoing": {
       "comment": "Widget headline while an attack is ongoing",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -249,6 +253,7 @@
     },
     "Attack-free": {
       "comment": "Widget headline when no attack is ongoing",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -364,6 +369,7 @@
     },
     "End attack": {
       "comment": "Action that opens the ongoing attack so it can be ended",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -548,6 +554,7 @@
     },
     "Open the app to sign in": {
       "comment": "Widget shown before signing in",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -686,6 +693,7 @@
     },
     "Start now": {
       "comment": "Short widget button that starts an attack now",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -709,6 +717,7 @@
     },
     "Today: %lld attacks": {
       "comment": "Number of attacks logged today",
+      "extractionState": "manual",
       "localizations": {
         "de": {
           "variations": {

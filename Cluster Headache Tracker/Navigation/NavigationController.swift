@@ -4,6 +4,11 @@ import UIKit
 /// Large titles on the root screen of each tab, inline titles everywhere else
 /// (pushed screens and modal sheets).
 final class NavigationController: HotwireNavigationController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationBar.prefersLargeTitles = true
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         navigationBar.prefersLargeTitles = presentingViewController == nil
         super.viewWillAppear(animated)

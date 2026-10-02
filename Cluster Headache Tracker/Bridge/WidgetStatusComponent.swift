@@ -3,7 +3,8 @@ import UIKit
 
 /// Native side of the `bridge--widget-status` Stimulus controller. On
 /// `connect` the web app sends the current attack status, which feeds the
-/// widgets, quick actions and Live Activity.
+/// widgets, quick actions and Live Activity. Snapshots with start times in the
+/// future are ignored.
 final class WidgetStatusComponent: BridgeComponent {
     override nonisolated class var name: String { "widget-status" }
 
@@ -14,7 +15,10 @@ final class WidgetStatusComponent: BridgeComponent {
             return
         }
 
-        StatusSync.apply(data.status(updatedAt: .now))
+        let status = data.status(updatedAt: .now)
+        guard !status.hasFutureTimestamps(relativeTo: status.updatedAt) else { return }
+
+        StatusSync.apply(status)
     }
 }
 
