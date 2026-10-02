@@ -21,6 +21,7 @@ struct NativeShellTests {
         #expect(QuickActions.items(for: status(ongoing: true, locale: "de")).map(\.localizedTitle) == ["Attacke erfassen", "Attacke beenden"])
         #expect(QuickActions.items(for: status(ongoing: false, locale: "it")).first?.localizedTitle == "Registra attacco")
         #expect(QuickActions.items(for: status(ongoing: false, locale: "es")).first?.localizedTitle == "Registrar crisis")
+        #expect(Localization.string("Log attack", language: "de-DE") == "Attacke erfassen")
     }
 
     @Test func pageZoomGrowsWithTheTextSize() {

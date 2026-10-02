@@ -12,7 +12,8 @@ enum Localization {
 
     static func bundle(for language: String?) -> Bundle {
         guard let language,
-              let path = bundle.path(forResource: language, ofType: "lproj"),
+              let match = Bundle.preferredLocalizations(from: bundle.localizations, forPreferences: [language]).first,
+              let path = bundle.path(forResource: match, ofType: "lproj"),
               let localized = Bundle(path: path)
         else {
             return bundle

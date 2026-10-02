@@ -12,13 +12,23 @@ final class DocumentPreviewer: NSObject {
 
     private var previewURL: URL?
     private var task: Task<Void, Never>?
+    private var generation = 0
+    private var restoreActivity: (() -> Void)?
 
     func preview(_ url: URL, title: String?, from presenter: UIViewController) {
         task?.cancel()
+        restoreActivity?()
 
-        let restoreItem = showActivity(on: presenter)
+        generation += 1
+        let current = generation
+        restoreActivity = showActivity(on: presenter)
         task = Task {
-            defer { restoreItem() }
+            defer {
+                if current == generation {
+                    restoreActivity?()
+                    restoreActivity = nil
+                }
+            }
             do {
                 let fileURL = try await download(url, title: title)
                 try Task.checkCancellation()

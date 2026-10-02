@@ -25,5 +25,6 @@ struct ButtonComponentTests {
         #expect(try action(#"{"title":"Neu","iosImage":"plus"}"#) == nil)
         #expect(try action(#"{"title":"Abmelden"}"#) == nil)
         #expect(try action(#"{"title":"Neu","nativeAction":"unknown"}"#) == nil)
+        #expect(try action(#"{"title":"Sign Out","nativeAction":"unknown"}"#) == nil)
     }
 }

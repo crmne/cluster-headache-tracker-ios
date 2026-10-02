@@ -149,8 +149,8 @@ extension CompatibleButtonComponent {
         /// printer symbol). Sign out is additionally detected from the sign out
         /// form submission in `SceneController`.
         var resolvedNativeAction: NativeAction? {
-            if let nativeAction, let action = NativeAction(rawValue: nativeAction) {
-                return action
+            if let nativeAction {
+                return NativeAction(rawValue: nativeAction)
             }
             switch title {
             case "Print": return .print

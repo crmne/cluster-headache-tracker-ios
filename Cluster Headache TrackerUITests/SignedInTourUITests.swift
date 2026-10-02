@@ -25,7 +25,12 @@ final class SignedInTourUITests: XCTestCase {
         else {
             throw XCTSkip("Set CHT_PREVIEW_URL, CHT_DEMO_USERNAME and CHT_DEMO_PASSWORD to run the signed-in tour")
         }
-        XCTAssertFalse(baseURL.contains("clusterheadachetracker.com"), "The tour must not run against production")
+        guard let host = URL(string: baseURL)?.host()?.lowercased() else {
+            throw XCTSkip("CHT_PREVIEW_URL is not a valid URL")
+        }
+        if host == "clusterheadachetracker.com" || host.hasSuffix(".clusterheadachetracker.com") {
+            throw XCTSkip("The tour must not run against production")
+        }
 
         app = XCUIApplication()
         app.launchEnvironment["CLUSTER_HEADACHE_TRACKER_BASE_URL"] = baseURL

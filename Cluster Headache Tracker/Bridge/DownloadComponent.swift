@@ -15,6 +15,7 @@ final class DownloadComponent: BridgeComponent {
         guard ["download", "connect"].contains(message.event),
               let data: MessageData = message.data(),
               let url = URL(string: data.url, relativeTo: AppConfig.baseURL)?.absoluteURL,
+              url.scheme == AppConfig.baseURL.scheme,
               url.host() == AppConfig.baseURL.host(),
               let viewController
         else {
