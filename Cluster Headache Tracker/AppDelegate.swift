@@ -1,5 +1,6 @@
 import BridgeComponents
 import Honeybadger
+// Hotwire.config is a mutable static from a Swift 5 module; it is only touched on the main thread.
 @preconcurrency import HotwireNative
 import UIKit
 
@@ -51,8 +52,17 @@ private extension AppDelegate {
 
         Hotwire.config.applicationUserAgentPrefix = AppConfig.applicationUserAgentPrefix
         Hotwire.config.backButtonDisplayMode = .minimal
-        Hotwire.config.showDoneButtonOnModals = true
         Hotwire.config.hideTabBarWhenPushed = true
+        Hotwire.config.animateReplaceActions = true
+        Hotwire.config.defaultViewController = { url in
+            MainActor.assumeIsolated { WebViewController(url: url) }
+        }
+        Hotwire.config.defaultNavigationController = {
+            MainActor.assumeIsolated { NavigationController() }
+        }
+        Hotwire.config.makeCustomWebView = { configuration in
+            MainActor.assumeIsolated { WebViewFactory.makeWebView(configuration: configuration) }
+        }
         #if DEBUG
             Hotwire.config.debugLoggingEnabled = true
         #endif

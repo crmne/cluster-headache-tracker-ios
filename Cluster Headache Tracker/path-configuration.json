@@ -36,7 +36,8 @@
       "patterns": [
         "/headache_logs/new$",
         "/headache_logs/.*/edit$",
-        "/feedback/new$"
+        "/feedback/new$",
+        "/current_attack$"
       ],
       "properties": {
         "context": "modal",

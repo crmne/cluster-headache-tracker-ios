@@ -81,6 +81,12 @@ enum AppConfig {
         authenticationPaths.contains(url.path)
     }
 
+    static let signOutPath = "/users/sign_out"
+
+    static func isSignOutURL(_ url: URL) -> Bool {
+        url.path == signOutPath
+    }
+
     static func isCompatibilityAuthenticationRefreshURL(_ url: URL) -> Bool {
         url.path == compatibilityAuthenticationRefreshPath
     }
