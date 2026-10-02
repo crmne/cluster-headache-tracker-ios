@@ -67,6 +67,13 @@ private extension AppDelegate {
             Hotwire.config.debugLoggingEnabled = true
         #endif
 
+        Hotwire.registerRouteDecisionHandlers([
+            DocumentRouteDecisionHandler(),
+            AppNavigationRouteDecisionHandler(),
+            SafariViewControllerRouteDecisionHandler(),
+            SystemNavigationRouteDecisionHandler(),
+        ])
+
         Hotwire.registerBridgeComponents(bridgeComponents)
     }
 
@@ -76,6 +83,8 @@ private extension AppDelegate {
         } + [
             CompatibleButtonComponent.self,
             CompatibleShareComponent.self,
+            WidgetStatusComponent.self,
+            DownloadComponent.self,
         ]
     }
 }

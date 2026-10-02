@@ -7,12 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA11F0000000000000000015 /* Cluster Headache Tracker Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CA11F0000000000000000001 /* Cluster Headache Tracker Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DB8561302CC2883A003309C3 /* HotwireNative in Frameworks */ = {isa = PBXBuildFile; productRef = DB85612F2CC2883A003309C3 /* HotwireNative */; };
 		DBED15102EB244C700E52E50 /* Honeybadger in Frameworks */ = {isa = PBXBuildFile; productRef = DBED150F2EB244C700E52E50 /* Honeybadger */; };
 		DBF100012F1000010000001 /* BridgeComponents in Frameworks */ = {isa = PBXBuildFile; productRef = DBF100112F1000010000001 /* BridgeComponents */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		CA11F0000000000000000016 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DB8560F22CC28605003309C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA11F0000000000000000010;
+			remoteInfo = "Cluster Headache Tracker Widgets";
+		};
 		DB8561112CC28607003309C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DB8560F22CC28605003309C3 /* Project object */;
@@ -29,16 +37,41 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		CA11F0000000000000000014 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CA11F0000000000000000015 /* Cluster Headache Tracker Widgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		CA11F0000000000000000030 /* App.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = App.xcconfig; path = Configuration/App.xcconfig; sourceTree = "<group>"; };
+		CA11F0000000000000000001 /* Cluster Headache Tracker Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Cluster Headache Tracker Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB8560FA2CC28605003309C3 /* Cluster Headache Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cluster Headache Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB8561102CC28607003309C3 /* Cluster Headache TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cluster Headache TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB85611A2CC28607003309C3 /* Cluster Headache TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cluster Headache TrackerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CA11F0000000000000000004 /* Exceptions for "Widgets" folder in "Cluster Headache Tracker Widgets" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				Widgets.entitlements,
+			);
+			target = CA11F0000000000000000010 /* Cluster Headache Tracker Widgets */;
+		};
 		DB8561222CC28607003309C3 /* Exceptions for "Cluster Headache Tracker" folder in "Cluster Headache Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Cluster Headache Tracker.entitlements",
 				Info.plist,
 			);
 			target = DB8560F92CC28605003309C3 /* Cluster Headache Tracker */;
@@ -46,6 +79,19 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		CA11F0000000000000000002 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		CA11F0000000000000000003 /* Widgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CA11F0000000000000000004 /* Exceptions for "Widgets" folder in "Cluster Headache Tracker Widgets" target */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
 		DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -67,6 +113,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CA11F0000000000000000012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DB8560F72CC28605003309C3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -98,6 +151,9 @@
 			isa = PBXGroup;
 			children = (
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
+				CA11F0000000000000000002 /* Shared */,
+				CA11F0000000000000000030 /* App.xcconfig */,
+				CA11F0000000000000000003 /* Widgets */,
 				DB8561132CC28607003309C3 /* Cluster Headache TrackerTests */,
 				DB85611D2CC28607003309C3 /* Cluster Headache TrackerUITests */,
 				DB8560FB2CC28605003309C3 /* Products */,
@@ -110,6 +166,7 @@
 				DB8560FA2CC28605003309C3 /* Cluster Headache Tracker.app */,
 				DB8561102CC28607003309C3 /* Cluster Headache TrackerTests.xctest */,
 				DB85611A2CC28607003309C3 /* Cluster Headache TrackerUITests.xctest */,
+				CA11F0000000000000000001 /* Cluster Headache Tracker Widgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,6 +174,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CA11F0000000000000000010 /* Cluster Headache Tracker Widgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA11F0000000000000000018 /* Build configuration list for PBXNativeTarget "Cluster Headache Tracker Widgets" */;
+			buildPhases = (
+				CA11F0000000000000000011 /* Sources */,
+				CA11F0000000000000000012 /* Frameworks */,
+				CA11F0000000000000000013 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CA11F0000000000000000002 /* Shared */,
+				CA11F0000000000000000003 /* Widgets */,
+			);
+			name = "Cluster Headache Tracker Widgets";
+			packageProductDependencies = (
+			);
+			productName = "Cluster Headache Tracker Widgets";
+			productReference = CA11F0000000000000000001 /* Cluster Headache Tracker Widgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		DB8560F92CC28605003309C3 /* Cluster Headache Tracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DB8561232CC28607003309C3 /* Build configuration list for PBXNativeTarget "Cluster Headache Tracker" */;
@@ -124,13 +204,16 @@
 				DB8560F62CC28605003309C3 /* Sources */,
 				DB8560F72CC28605003309C3 /* Frameworks */,
 				DB8560F82CC28605003309C3 /* Resources */,
+				CA11F0000000000000000014 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CA11F0000000000000000017 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
+				CA11F0000000000000000002 /* Shared */,
 			);
 			name = "Cluster Headache Tracker";
 			packageProductDependencies = (
@@ -201,6 +284,9 @@
 					DB8560F92CC28605003309C3 = {
 						CreatedOnToolsVersion = 16.0;
 					};
+					CA11F0000000000000000010 = {
+						CreatedOnToolsVersion = 27.0;
+					};
 					DB85610F2CC28607003309C3 = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = DB8560F92CC28605003309C3;
@@ -236,11 +322,19 @@
 				DB8560F92CC28605003309C3 /* Cluster Headache Tracker */,
 				DB85610F2CC28607003309C3 /* Cluster Headache TrackerTests */,
 				DB8561192CC28607003309C3 /* Cluster Headache TrackerUITests */,
+				CA11F0000000000000000010 /* Cluster Headache Tracker Widgets */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CA11F0000000000000000013 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DB8560F82CC28605003309C3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,6 +359,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CA11F0000000000000000011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DB8560F62CC28605003309C3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -289,6 +390,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		CA11F0000000000000000017 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA11F0000000000000000010 /* Cluster Headache Tracker Widgets */;
+			targetProxy = CA11F0000000000000000016 /* PBXContainerItemProxy */;
+		};
 		DB8561122CC28607003309C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DB8560F92CC28605003309C3 /* Cluster Headache Tracker */;
@@ -302,10 +408,70 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		DB8561242CC28607003309C3 /* Debug */ = {
+		CA11F0000000000000000019 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Widgets/Widgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = JPL7999US3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Cluster Headache Tracker";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(APP_VERSION)";
+				PRODUCT_BUNDLE_IDENTIFIER = "me.paolino.Cluster-Headache-Tracker.Widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CA11F0000000000000000020 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Widgets/Widgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = JPL7999US3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Cluster Headache Tracker";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(APP_VERSION)";
+				PRODUCT_BUNDLE_IDENTIFIER = "me.paolino.Cluster-Headache-Tracker.Widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DB8561242CC28607003309C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA11F0000000000000000030 /* App.xcconfig */;
+			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Cluster Headache Tracker/Cluster Headache Tracker.entitlements";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
@@ -336,8 +502,10 @@
 		};
 		DB8561252CC28607003309C3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA11F0000000000000000030 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Cluster Headache Tracker/Cluster Headache Tracker.entitlements";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
@@ -564,6 +732,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CA11F0000000000000000018 /* Build configuration list for PBXNativeTarget "Cluster Headache Tracker Widgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA11F0000000000000000019 /* Debug */,
+				CA11F0000000000000000020 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DB8560F52CC28605003309C3 /* Build configuration list for PBXProject "Cluster Headache Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

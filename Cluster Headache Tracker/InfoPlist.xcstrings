@@ -1,0 +1,84 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Current attack": {
+      "comment": "Home Screen quick action",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelle Attacke"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crisis actual"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attacco in corso"
+          }
+        }
+      }
+    },
+    "Log attack": {
+      "comment": "Home Screen quick action",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attacke erfassen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar crisis"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registra attacco"
+          }
+        }
+      }
+    },
+    "NSCameraUsageDescription": {
+      "comment": "Camera permission",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nimm Fotos auf, um sie an deine Kopfschmerzeinträge anzuhängen, zum Beispiel deine Sauerstoffausrüstung oder Symptome."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take photos to attach to your headache logs, like your oxygen setup or symptoms."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haz fotos para adjuntarlas a tus registros de cefaleas, como tu equipo de oxígeno o tus síntomas."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scatta foto da allegare alle tue registrazioni delle cefalee, come la tua attrezzatura per l'ossigeno o i sintomi."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

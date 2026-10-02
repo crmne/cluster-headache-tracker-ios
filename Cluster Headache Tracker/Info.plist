@@ -2,6 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>de</string>
+		<string>it</string>
+		<string>es</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>me.paolino.Cluster-Headache-Tracker</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>clusterheadachetracker</string>
+			</array>
+		</dict>
+	</array>
+	<key>HONEYBADGER_API_KEY</key>
+	<string>$(HONEYBADGER_API_KEY)</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Take photos to attach to your headache logs, like your oxygen setup or symptoms.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -19,28 +48,24 @@
 			</array>
 		</dict>
 	</dict>
-	<key>HONEYBADGER_API_KEY</key>
-	<string>$(HONEYBADGER_API_KEY)</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Camera access is used for barcode and document scanning bridge components.</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Face ID can be used by bridge components to protect sensitive screens.</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSExceptionDomains</key>
+	<key>UIApplicationShortcutItems</key>
+	<array>
 		<dict>
-			<key>192.168.8.220</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>plus.circle.fill</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Log attack</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>me.paolino.Cluster-Headache-Tracker.quickLog</string>
 		</dict>
-	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location access can be requested by bridge components when a workflow needs it.</string>
-	<key>NFCReaderUsageDescription</key>
-	<string>NFC access can be used by bridge components to read supported tags.</string>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>timer</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Current attack</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>me.paolino.Cluster-Headache-Tracker.currentAttack</string>
+		</dict>
+	</array>
 </dict>
 </plist>

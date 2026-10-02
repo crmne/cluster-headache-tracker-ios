@@ -61,6 +61,11 @@ final class CompatibleButtonComponent: BridgeComponent {
 
         if data.isPrint {
             printCurrentPage()
+        } else if data.isSignOut {
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(350))
+                NotificationCenter.default.post(name: .signOutRequested, object: nil)
+            }
         }
     }
 
@@ -95,6 +100,10 @@ final class CompatibleButtonComponent: BridgeComponent {
     }
 }
 
+extension Notification.Name {
+    static let signOutRequested = Notification.Name("ClusterHeadacheTracker.SignOutRequested")
+}
+
 private extension CompatibleButtonComponent {
     enum Event: String {
         case left
@@ -117,6 +126,13 @@ private extension CompatibleButtonComponent {
         /// to the English title older server builds send.
         var isPrint: Bool {
             image == "printer" || title == "Print"
+        }
+
+        /// The account page's sign out button. Sign out is also detected from the
+        /// form submission (see `SceneController`), which keeps working once the
+        /// title is translated.
+        var isSignOut: Bool {
+            title == "Sign Out"
         }
 
         enum CodingKeys: String, CodingKey {

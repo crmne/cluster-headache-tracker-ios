@@ -34,9 +34,8 @@
     },
     {
       "patterns": [
-        "/headache_logs/new$",
+        "/headache_logs/new(\\?.*)?$",
         "/headache_logs/.*/edit$",
-        "/feedback/new$",
         "/current_attack$"
       ],
       "properties": {
@@ -56,6 +55,24 @@
       ],
       "properties": {
         "context": "default"
+      }
+    },
+    {
+      "patterns": [
+        "/refresh_historical_location$"
+      ],
+      "properties": {
+        "presentation": "refresh",
+        "historical_location": true
+      }
+    },
+    {
+      "patterns": [
+        "/resume_historical_location$"
+      ],
+      "properties": {
+        "presentation": "none",
+        "historical_location": true
       }
     }
   ]

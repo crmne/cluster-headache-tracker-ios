@@ -16,7 +16,9 @@ final class WebViewController: HotwireWebViewController {
         let action = UIAction { [weak self] _ in
             self?.dismiss(animated: true)
         }
-        navigationItem.leftBarButtonItem = UIBarButtonItem(systemItem: .close, primaryAction: action)
+        let closeButton = UIBarButtonItem(systemItem: .close, primaryAction: action)
+        closeButton.accessibilityIdentifier = "close-sheet"
+        navigationItem.leftBarButtonItem = closeButton
     }
 
     private var isRootOfModal: Bool {

@@ -7,10 +7,12 @@ final class SceneController: UIResponder {
 
     private var tabBarController: AppTabBarController?
     private var isAuthenticationRoutePending = false
+    private var signOutObserver: NSObjectProtocol?
+    private var lastSignOut: ContinuousClock.Instant?
 }
 
 extension SceneController: UIWindowSceneDelegate {
-    func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
+    func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
         let window = UIWindow(windowScene: windowScene)
@@ -19,6 +21,71 @@ extension SceneController: UIWindowSceneDelegate {
         installRootController(selectedTabID: nil)
 
         window.makeKeyAndVisible()
+
+        signOutObserver = NotificationCenter.default.addObserver(
+            forName: .signOutRequested,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.handleSignOut()
+            }
+        }
+
+        DeepLinkCenter.shared.handler = { [weak self] link in
+            self?.open(link)
+        }
+
+        if let shortcutItem = connectionOptions.shortcutItem {
+            handle(shortcutItem)
+        }
+        if let url = connectionOptions.urlContexts.first?.url {
+            handle(url)
+        }
+    }
+
+    func scene(_: UIScene, openURLContexts contexts: Set<UIOpenURLContext>) {
+        if let url = contexts.first?.url {
+            handle(url)
+        }
+    }
+
+    func windowScene(
+        _: UIWindowScene,
+        performActionFor shortcutItem: UIApplicationShortcutItem,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
+        completionHandler(handle(shortcutItem))
+    }
+}
+
+private extension SceneController {
+    @discardableResult
+    func handle(_ shortcutItem: UIApplicationShortcutItem) -> Bool {
+        guard let link = DeepLink(shortcutType: shortcutItem.type) else { return false }
+        open(link)
+        return true
+    }
+
+    func handle(_ url: URL) {
+        if let link = DeepLink(appURL: url) {
+            open(link)
+        }
+    }
+
+    /// Routes a deep link from the visible tab, closing any sheet first so the
+    /// destination always ends up on top.
+    func open(_ link: DeepLink) {
+        guard let navigator = tabBarController?.activeNavigator else { return }
+        let url = link.webURL(baseURL: AppConfig.baseURL)
+
+        if let presented = navigator.rootViewController.presentedViewController {
+            presented.dismiss(animated: false) {
+                navigator.route(url)
+            }
+        } else {
+            navigator.route(url)
+        }
     }
 }
 
@@ -128,7 +195,15 @@ private extension SceneController {
     /// Rebuilds every tab after signing out so no signed-in screen stays cached
     /// behind another tab, then asks for credentials again.
     func handleSignOut() {
+        // The sign out button and the form submission both report the same sign out.
+        let now = ContinuousClock.now
+        if let lastSignOut, now - lastSignOut < .seconds(3) {
+            return
+        }
+        lastSignOut = now
+
         isAuthenticationRoutePending = false
+        StatusSync.clear()
         let selectedTabID = tabBarController?.selectedTab?.identifier
 
         installRootController(selectedTabID: selectedTabID)
