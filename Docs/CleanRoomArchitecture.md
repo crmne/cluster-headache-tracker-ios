@@ -72,11 +72,10 @@ The rewrite should use the modern Hotwire configuration surface:
 
 - `Hotwire.loadPathConfiguration(...)`
 - `Hotwire.config.applicationUserAgentPrefix`
-- `Hotwire.config.showDoneButtonOnModals = true`
 - `Hotwire.config.backButtonDisplayMode = .minimal`
 - `Hotwire.config.hideTabBarWhenPushed = true`
 
-No custom web view controller is needed unless a concrete rendering problem remains after the rewrite.
+`WebViewController` subclasses `HotwireWebViewController` only to add a close button to sheets; it must not recreate the `BridgeDelegate`. `NavigationController` adds large titles on tab roots.
 
 ## Authentication Model
 

@@ -11,6 +11,10 @@ The main reason for creating this iOS app is to increase accessibility and visib
 - 📱 Access the Cluster Headache Tracker web app through a familiar iOS app interface
 - 📊 View and interact with headache logs and charts
 - 🔒 Secure authentication and data storage (handled by the web app)
+- ⚡️ Log an attack fast: Home Screen quick actions, Siri and Shortcuts ("Log an attack in Cluster Headache Tracker"), the Action button and a Control Center control
+- ⏱️ Widgets for the Home and Lock Screen, plus a Live Activity that times an ongoing attack on the Lock Screen and in the Dynamic Island
+- 📄 PDF reports and CSV exports open in Quick Look, ready to share or print
+- 🌍 English, German, Italian and Spanish
 
 ## 🔢 Versioning
 
