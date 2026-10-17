@@ -11,15 +11,6 @@
       }
     },
     {
-      "identity" : "honeybadger-cocoa",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/honeybadger-io/honeybadger-cocoa",
-      "state" : {
-        "revision" : "806be8a53ed130548d4e94cf1a9717d514ab5cf5",
-        "version" : "2.0.0"
-      }
-    },
-    {
       "identity" : "hotwire-native-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/hotwired/hotwire-native-ios",

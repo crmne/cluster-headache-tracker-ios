@@ -1,6 +1,5 @@
 .claude/
 build/
 Config/
-Configuration/Secrets.xcconfig
 Cluster Headache Tracker/Generated/
 xcuserdata/

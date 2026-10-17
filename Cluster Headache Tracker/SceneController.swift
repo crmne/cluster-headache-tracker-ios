@@ -1,4 +1,3 @@
-import Honeybadger
 import HotwireNative
 import UIKit
 
@@ -122,9 +121,6 @@ extension SceneController: @preconcurrency NavigatorDelegate {
             return
         }
 
-        let context = errorContext(for: visitable, error: error)
-        Honeybadger.notify(error: error, context: context)
-
         if let errorPresenter = visitable as? ErrorPresenter {
             errorPresenter.presentError(error, retryHandler: retryHandler)
         }
@@ -212,22 +208,5 @@ private extension SceneController {
 
     func cleanupUnauthorizedFailure() {
         tabBarController?.activeNavigator.pop(animated: false)
-    }
-
-    func errorContext(for visitable: any Visitable, error: HotwireNativeError) -> [String: String] {
-        [
-            "source": "SceneController",
-            "url": visitableURLString(for: visitable),
-            "error_type": String(describing: type(of: error)),
-            "status_code": error.statusCode.map(String.init) ?? "none",
-        ]
-    }
-
-    func visitableURLString(for visitable: any Visitable) -> String {
-        if let visitableController = visitable as? VisitableViewController {
-            return visitableController.currentVisitableURL.absoluteString
-        }
-
-        return "unknown"
     }
 }

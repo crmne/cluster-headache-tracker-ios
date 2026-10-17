@@ -1,17 +1,11 @@
 import BridgeComponents
-import Honeybadger
 // Hotwire.config is a mutable static from a Swift 5 module; it is only touched on the main thread.
 @preconcurrency import HotwireNative
 import UIKit
 
-enum EnvironmentConfig {
-    static let honeybadgerAPIKey: String? = Bundle.main.object(forInfoDictionaryKey: "HONEYBADGER_API_KEY") as? String
-}
-
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        configureHoneybadger()
         AppAppearance.configure()
         configureHotwire()
         return true
@@ -23,27 +17,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 private extension AppDelegate {
-    private func configureHoneybadger() {
-        guard let apiKey = EnvironmentConfig.honeybadgerAPIKey,
-              !apiKey.isEmpty
-        else {
-            return
-        }
-
-        Honeybadger.configure(
-            apiKey: apiKey,
-            environment: AppConfig.isDebug ? "development" : "production",
-            revision: "\(AppConfig.appVersion) (\(AppConfig.buildNumber))"
-        )
-
-        Honeybadger.setContext(context: [
-            "app_version": AppConfig.appVersion,
-            "build_number": AppConfig.buildNumber,
-            "ios_version": UIDevice.current.systemVersion,
-            "device_model": UIDevice.current.model,
-        ])
-    }
-
     private func configureHotwire() {
         Hotwire.loadPathConfiguration(from: [
             .file(AppConfig.bundledPathConfigurationURL),

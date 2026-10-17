@@ -24,7 +24,6 @@ This document is the implementation contract for the rewrite.
 
 - Hotwire Native iOS `1.3.1` (remote package, up to next major).
 - Bridge Components `v0.14.0` (remote package, up to next minor; supports Hotwire Native 1.2.x and 1.3.x).
-- Honeybadger Cocoa `2.0.0` (remote package, up to next major; requires iOS 16+).
 - Swift 6 language mode, iOS 18.0 deployment target.
 
 ## Product Model
@@ -45,7 +44,6 @@ The `"New"` tab is not a real destination. Selecting it should route to `/headac
 
 ### AppDelegate responsibilities
 
-- configure Honeybadger if an API key is available
 - configure global UIKit appearance
 - configure Hotwire before any navigator is created
 - load bundled and remote path configuration
@@ -58,7 +56,7 @@ The `"New"` tab is not a real destination. Selecting it should route to `/headac
 - rebuild the root controller after authentication changes
 - handle 401 responses by presenting the sign-in flow as a modal
 - preserve the selected tab across auth refreshes when possible
-- report non-auth visit failures to Honeybadger and present retry UI
+- present retry UI for non-auth visit failures
 
 ### Tab controller responsibilities
 

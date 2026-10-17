@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		CA11F0000000000000000015 /* Cluster Headache Tracker Widgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CA11F0000000000000000001 /* Cluster Headache Tracker Widgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DB8561302CC2883A003309C3 /* HotwireNative in Frameworks */ = {isa = PBXBuildFile; productRef = DB85612F2CC2883A003309C3 /* HotwireNative */; };
-		DBED15102EB244C700E52E50 /* Honeybadger in Frameworks */ = {isa = PBXBuildFile; productRef = DBED150F2EB244C700E52E50 /* Honeybadger */; };
 		DBF100012F1000010000001 /* BridgeComponents in Frameworks */ = {isa = PBXBuildFile; productRef = DBF100112F1000010000001 /* BridgeComponents */; };
 /* End PBXBuildFile section */
 
@@ -52,7 +51,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CA11F0000000000000000030 /* App.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = App.xcconfig; path = Configuration/App.xcconfig; sourceTree = "<group>"; };
 		CA11F0000000000000000001 /* Cluster Headache Tracker Widgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Cluster Headache Tracker Widgets.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB8560FA2CC28605003309C3 /* Cluster Headache Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cluster Headache Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB8561102CC28607003309C3 /* Cluster Headache TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cluster Headache TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,7 +124,6 @@
 			files = (
 				DBF100012F1000010000001 /* BridgeComponents in Frameworks */,
 				DB8561302CC2883A003309C3 /* HotwireNative in Frameworks */,
-				DBED15102EB244C700E52E50 /* Honeybadger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,7 +149,6 @@
 			children = (
 				DB8560FC2CC28605003309C3 /* Cluster Headache Tracker */,
 				CA11F0000000000000000002 /* Shared */,
-				CA11F0000000000000000030 /* App.xcconfig */,
 				CA11F0000000000000000003 /* Widgets */,
 				DB8561132CC28607003309C3 /* Cluster Headache TrackerTests */,
 				DB85611D2CC28607003309C3 /* Cluster Headache TrackerUITests */,
@@ -219,7 +215,6 @@
 			packageProductDependencies = (
 				DB85612F2CC2883A003309C3 /* HotwireNative */,
 				DBF100112F1000010000001 /* BridgeComponents */,
-				DBED150F2EB244C700E52E50 /* Honeybadger */,
 			);
 			productName = "Cluster Headache Tracker";
 			productReference = DB8560FA2CC28605003309C3 /* Cluster Headache Tracker.app */;
@@ -312,7 +307,6 @@
 			packageReferences = (
 				DB85612E2CC2883A003309C3 /* XCRemoteSwiftPackageReference "hotwire-native-ios" */,
 				DBF100032F1000010000001 /* XCRemoteSwiftPackageReference "bridge-components" */,
-				DBED150E2EB244C700E52E50 /* XCRemoteSwiftPackageReference "honeybadger-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DB8560FB2CC28605003309C3 /* Products */;
@@ -468,7 +462,6 @@
 		};
 		DB8561242CC28607003309C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA11F0000000000000000030 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Cluster Headache Tracker/Cluster Headache Tracker.entitlements";
@@ -502,7 +495,6 @@
 		};
 		DB8561252CC28607003309C3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CA11F0000000000000000030 /* App.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Cluster Headache Tracker/Cluster Headache Tracker.entitlements";
@@ -788,14 +780,6 @@
 				minimumVersion = 1.3.1;
 			};
 		};
-		DBED150E2EB244C700E52E50 /* XCRemoteSwiftPackageReference "honeybadger-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/honeybadger-io/honeybadger-cocoa";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		DBF100032F1000010000001 /* XCRemoteSwiftPackageReference "bridge-components" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/joemasilotti/bridge-components";
@@ -811,11 +795,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DB85612E2CC2883A003309C3 /* XCRemoteSwiftPackageReference "hotwire-native-ios" */;
 			productName = HotwireNative;
-		};
-		DBED150F2EB244C700E52E50 /* Honeybadger */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DBED150E2EB244C700E52E50 /* XCRemoteSwiftPackageReference "honeybadger-cocoa" */;
-			productName = Honeybadger;
 		};
 		DBF100112F1000010000001 /* BridgeComponents */ = {
 			isa = XCSwiftPackageProductDependency;
