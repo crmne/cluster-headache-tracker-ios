@@ -4,11 +4,18 @@ import UIKit
 /// Native side of the `bridge--widget-status` Stimulus controller. On
 /// `connect` the web app sends the current attack status, which feeds the
 /// widgets, quick actions and Live Activity. Snapshots with start times in the
-/// future are ignored.
+/// future are ignored. Signed-out pages send `clear` (after a sign-out on the
+/// web, an expired session or a deleted account), which forgets the last
+/// account's status everywhere outside the web view.
 final class WidgetStatusComponent: BridgeComponent {
     override nonisolated class var name: String { "widget-status" }
 
     override func onReceive(message: Message) {
+        if message.event == "clear" {
+            StatusSync.clear()
+            return
+        }
+
         guard message.event == "connect",
               let data: MessageData = message.data()
         else {

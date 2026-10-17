@@ -8,11 +8,11 @@ Hotwire Native iOS shell for the Cluster Headache Tracker Rails app (https://clu
 
 ## Key Architecture
 
-- **`AppDelegate`**: configures Honeybadger, UIKit appearance and Hotwire (path configuration, custom view/navigation controllers, web view factory, route decision handlers, bridge components).
+- **`AppDelegate`**: configures UIKit appearance and Hotwire (path configuration, custom view/navigation controllers, web view factory, route decision handlers, bridge components).
 - **`SceneController`**: owns the window and the `AppTabBarController`, presents sign-in on 401, rebuilds all tabs after sign-in (`/recede_historical_location`) and sign-out, and handles deep links (`clusterheadachetracker://`), quick actions and App Intents via `DeepLinkCenter`.
 - **`AppTabBarController` / `Tabs.swift`**: native tabs (Logs, Charts, New, Account, Feedback), one Hotwire `Navigator` each. "New" is not a destination: it opens `/headache_logs/new` as a sheet. The Rails app hides its own navigation for native shells (`native_app_with_tabs?`).
 - **`Navigation/`**: `WebViewController` (subclass of `HotwireWebViewController` that only adds a close button to sheets; never recreate its `BridgeDelegate`), `NavigationController` (large titles on tab roots), `WebViewFactory` (Dynamic Type via page zoom).
-- **`Bridge/`**: `CompatibleButtonComponent` (library `button` contract plus legacy `connect`; Print, Sign Out and Sponsor come from the web's `nativeAction`, falling back to English titles for older servers), `CompatibleShareComponent`, `WidgetStatusComponent` (custom `widget-status`), `DownloadComponent` (`download`). Every other component (form, menu, alert, toast, haptic, review-prompt, theme, search) comes from Joe Masilotti's `BridgeComponents` package (`Bridgework.coreComponents`).
+- **`Bridge/`**: `CompatibleButtonComponent` (library `button` contract plus legacy `connect`; Print, Sign Out and Sponsor come from the web's `nativeAction`, falling back to English titles for older servers), `CompatibleShareComponent`, `WidgetStatusComponent` (custom `widget-status`: `connect` carries the attack status, `clear` from signed-out pages forgets it), `DownloadComponent` (`download`). Every other component (form, menu, alert, toast, haptic, review-prompt, theme, search) comes from Joe Masilotti's `BridgeComponents` package (`Bridgework.coreComponents`).
 - **`Documents/`**: downloads PDF/CSV documents with the web view's cookies and shows them in Quick Look.
 - **`Status/StatusSync`**: fans `widget-status` out to the App Group store, widgets, quick actions and the Live Activity; cleared on sign out.
 - **`Shared/`**: compiled into the app and the widget extension (status model and store, deep links, App Intents, Live Activity attributes, `Localizable.xcstrings`).
@@ -35,11 +35,11 @@ UI tests run against production read-only (native chrome and the public sign-in 
 
 Set `CLUSTER_HEADACHE_TRACKER_BASE_URL` (e.g. `http://192.168.1.10:3000`) in the scheme's environment variables. Plain HTTP to local network addresses is allowed through `NSAllowsLocalNetworking`.
 
-### Honeybadger
+### Crash reports and privacy
 
-`HONEYBADGER_API_KEY` comes from `Configuration/App.xcconfig`, which includes the git-ignored `Configuration/Secrets.xcconfig` (see `Secrets.xcconfig.example`). Xcode Cloud writes that file in `ci_scripts/ci_post_clone.sh` from the `HONEYBADGER_API_KEY` secret environment variable. Without it, Honeybadger is disabled.
+The app ships no crash reporter, analytics or tracking SDK. Crashes reach us only through Apple (Xcode Organizer) from people who share analytics with developers. `PrivacyInfo.xcprivacy` in the app and the widget extension declare the App Group `UserDefaults` access and, for the app, the data the web service collects; keep them in step with the App Store privacy answers in `fastlane/README.md` and the Rails app's privacy policy.
 
-## Adding New Native Features
+\1Adding New Native Features
 
 1. Create a bridge component in `Bridge/` extending `BridgeComponent` (prefer the library's component when one exists).
 2. Register it in `AppDelegate.bridgeComponents`.
@@ -52,7 +52,7 @@ User-facing strings go through `String(localized:)` / SwiftUI literals and need 
 - Bundle IDs: `me.paolino.Cluster-Headache-Tracker`, widget extension `me.paolino.Cluster-Headache-Tracker.Widgets`
 - App Group: `group.me.paolino.Cluster-Headache-Tracker` (app and widget extension)
 - Minimum iOS: 18.0, Swift 6 language mode
-- Swift Package Manager only (Hotwire Native, Bridge Components, Honeybadger)
+- Swift Package Manager only (Hotwire Native, Bridge Components)
 - Release versions come from tags: `Scripts/archive-release.sh vX.Y.Z`
 
 ## Principles
