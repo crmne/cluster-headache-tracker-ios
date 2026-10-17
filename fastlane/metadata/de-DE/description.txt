@@ -1,0 +1,30 @@
+Cluster Headache Tracker ist ein kostenloses Tagebuch für Clusterkopfschmerz, entwickelt von jemandem, der selbst betroffen ist. Wenn eine Attacke kommt, startet ein Tipp die Uhr. Später, wenn Sie wieder klar denken können, tragen Sie nach, wie stark sie war und was geholfen hat.
+
+ATTACKEN MIT EINEM TIPP ERFASSEN
+• Attacken mit einem Tipp starten und beenden: in der App, per Widget, auf dem Sperrbildschirm, mit Siri, der Aktionstaste oder im Kontrollzentrum
+• Eine Live-Aktivität misst die Attacke auf dem Sperrbildschirm und in der Dynamic Island
+• Schmerzstärke von 1 bis 10, Auslöser, Notizen, Luftdruck und Fotos
+• Sauerstoff, Triptane und alle anderen Medikamente als Einnahmen, mit ihrer Wirkung
+• Prophylaxe nach Plan, mit den Einnahmen, die heute noch fällig sind
+
+MUSTER ERKENNEN
+• Diagramme zu Attacken pro Tag, Dauer, Stärke und Tageszeit
+• Clusterperioden, attackenfreie Serien und ein Attackenkalender
+• Welche Behandlung Ihnen hilft, nach Ihren eigenen Bewertungen
+• Eine Zeitleiste aller Attacken und Einnahmen
+
+FÜR DEN ARZTTERMIN
+• Ein PDF-Bericht mit Zusammenfassung, Diagrammen und allen Einträgen
+• Ein Link nur zum Lesen für Ihre Neurologin oder Ihren Neurologen, ohne Fotos, nach 30 Tagen ungültig
+• Auf der Website: Export als CSV und Import aus CSV oder Migraine Buddy
+
+DATENSCHUTZ VON ANFANG AN
+• Keine E-Mail-Adresse nötig, nur Benutzername und Passwort
+• Gespeichert auf Servern in Deutschland, übertragen nur verschlüsselt
+• Keine Werbung, kein Tracking, Ihre Daten werden nie verkauft
+• Konto mit allen Daten jederzeit in der App löschen
+• Open Source: Jeder kann den Quellcode lesen
+
+Auf Deutsch, Englisch, Italienisch und Spanisch, und im Web unter clusterheadachetracker.com.
+
+Cluster Headache Tracker ist ein Werkzeug zum Dokumentieren, kein Medizinprodukt. Es stellt keine Diagnosen, behandelt nicht und gibt keine ärztlichen Ratschläge. Sprechen Sie über Ihre Erkrankung und Behandlung mit einer Ärztin oder einem Arzt.

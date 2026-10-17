@@ -23,6 +23,10 @@ The main reason for creating this iOS app is to increase accessibility and visib
 - Example: `xcodebuild archive APP_VERSION=2.1.1 APP_BUILD_NUMBER=20101`
 - `Scripts/archive-release.sh v2.1.1` derives those values from the tag automatically
 
+## 🍏 App Store
+
+`fastlane/README.md` holds everything App Store Connect asks for: the listing in English and German, the privacy answers, the age rating, the review notes and how to reset the review account. `Scripts/store-screenshots.sh` takes the screenshots in the simulator from a local server with a synthetic account.
+
 ## 🛠 Requirements
 
 - iOS 18.0+
@@ -80,7 +84,7 @@ Cluster Headache Tracker iOS is released under the [GNU General Public License v
 
 ## 🔒 Privacy
 
-This iOS app provides access to the same web application as the browser version, maintaining the same privacy principles. No additional personally identifiable information is collected or stored. All data handling occurs on the EU-based servers of the main Cluster Headache Tracker application.
+This iOS app provides access to the same web application as the browser version, under the same [privacy policy](https://clusterheadachetracker.com/privacy-policy). It contains no analytics, crash reporting or tracking SDK. The attack status shown in widgets and the Live Activity stays on the device and is removed when you sign out.
 
 ## 🍕 Support the Project
 

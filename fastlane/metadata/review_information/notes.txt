@@ -1,0 +1,9 @@
+Cluster Headache Tracker is a free diary for people with cluster headaches. Accounts use a username and password only (no email address), so the demo account above is all you need. It holds made-up data: a cluster period of the last four weeks.
+
+Native features to try:
+- New (tab bar) or the "Log attack" Home Screen quick action opens the new attack form.
+- Account > Delete account deletes the account and all of its data after asking for its password. Feel free to try it: we recreate the demo account before every submission.
+- Widgets (Home and Lock Screen), a Live Activity while an attack is ongoing, a Control Center control and Siri / Shortcuts phrases ("Log an attack in Cluster Headache Tracker").
+- Reports open in Quick Look to share or print.
+
+There are no in-app purchases, ads, tracking or third-party SDKs. The app does not use HealthKit. Data is stored on our servers in Germany. The app is a tracking tool, not a medical device, and says so in Account > About and in the description.

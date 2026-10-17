@@ -101,8 +101,7 @@ final class StoreScreenshotsUITests: XCTestCase {
             XCTAssertTrue(usernameField.waitForExistence(timeout: 30))
             // Typing while the sign-in page still settles loses keystrokes.
             sleep(3)
-            usernameField.tap()
-            usernameField.typeText(username)
+            fill(usernameField, with: username)
             XCTAssertEqual(usernameField.value as? String, username, "The username didn't stick")
             let passwordField = app.webViews.secureTextFields.firstMatch
             passwordField.tap()
@@ -115,23 +114,45 @@ final class StoreScreenshotsUITests: XCTestCase {
         sleep(5)
     }
 
+    /// Types into a web field until it holds the text: a busy simulator drops keystrokes.
+    @MainActor
+    private func fill(_ field: XCUIElement, with text: String) {
+        for _ in 0 ..< 3 {
+            field.tap()
+            let current = (field.value as? String) ?? ""
+            if !current.isEmpty {
+                field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: current.count))
+            }
+            field.typeText(text)
+            if field.value as? String == text { return }
+            sleep(1)
+        }
+    }
+
     /// The tab bar shrinks to a single button while a page scrolls down on iOS 26
     /// and later; scroll back up until the tab is there again.
     @MainActor
     private func tab(_ title: String) {
-        let button = app.tabBars.buttons[title]
-        if !button.exists {
+        if !tabButton(title).exists {
             // Tapping the status bar scrolls the page back to the top.
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.01)).tap()
             sleep(2)
         }
-        for _ in 0 ..< 8 where !button.exists {
+        for _ in 0 ..< 8 where !tabButton(title).exists {
             let webView = app.webViews.firstMatch
             webView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
                 .press(forDuration: 0.05, thenDragTo: webView.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.75)))
             sleep(1)
         }
-        button.tap()
+        tabButton(title).tap()
+    }
+
+    /// iPad's floating tab bar on iOS 26 and later isn't a tab bar to XCUITest,
+    /// only buttons.
+    @MainActor
+    private func tabButton(_ title: String) -> XCUIElement {
+        let inTabBar = app.tabBars.buttons[title]
+        return inTabBar.exists ? inTabBar : app.buttons[title].firstMatch
     }
 
     /// Drags the page by whole steps from the same spot, so every run frames the same content.
