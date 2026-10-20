@@ -84,7 +84,9 @@ access (external links open in Safari's view controller, there's no address
 bar). The one topic to declare is medical: people record their own
 medications and treatments, though the app gives no medical information or
 advice. Answer the medical or treatment question honestly as present but
-infrequent, and accept the rating App Store Connect computes.
+infrequent; answer No to Health or Wellness Topics (it recommends no
+self-care) and to every feature in step 1. App Store Connect computes 13+;
+override it to 16+, the minimum age the privacy policy sets.
 
 ## Guidelines worth knowing
 
