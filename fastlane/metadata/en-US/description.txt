@@ -10,7 +10,7 @@ LOG AN ATTACK IN ONE TAP
 SEE YOUR PATTERNS
 • Charts of attacks per day, duration, intensity and time of day
 • Cluster periods, attack-free streaks and an attack calendar
-• Which treatments work for you, from your own ratings
+• How well each treatment worked, by your own ratings
 • A timeline of every attack and dose
 
 BRING IT TO YOUR DOCTOR
@@ -20,7 +20,7 @@ BRING IT TO YOUR DOCTOR
 
 PRIVATE BY DESIGN
 • No email address needed, just a username and a password
-• Stored on servers in Germany, sent only over encrypted connections
+• Stored on servers in Germany, sent only over encrypted connections, with notes, triggers and medications encrypted in the database
 • No ads, no tracking, and your data is never sold
 • Delete your account and everything in it from the app at any time
 • Open source: anyone can read the code

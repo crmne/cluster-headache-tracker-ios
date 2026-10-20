@@ -10,7 +10,7 @@ ATTACKEN MIT EINEM TIPP ERFASSEN
 MUSTER ERKENNEN
 • Diagramme zu Attacken pro Tag, Dauer, Stärke und Tageszeit
 • Clusterperioden, attackenfreie Serien und ein Attackenkalender
-• Welche Behandlung Ihnen hilft, nach Ihren eigenen Bewertungen
+• Wie gut jede Behandlung gewirkt hat, nach Ihren eigenen Bewertungen
 • Eine Zeitleiste aller Attacken und Einnahmen
 
 FÜR DEN ARZTTERMIN
@@ -20,7 +20,7 @@ FÜR DEN ARZTTERMIN
 
 DATENSCHUTZ VON ANFANG AN
 • Keine E-Mail-Adresse nötig, nur Benutzername und Passwort
-• Gespeichert auf Servern in Deutschland, übertragen nur verschlüsselt
+• Gespeichert auf Servern in Deutschland, übertragen nur verschlüsselt, Notizen, Auslöser und Medikamente auch in der Datenbank verschlüsselt
 • Keine Werbung, kein Tracking, Ihre Daten werden nie verkauft
 • Konto mit allen Daten jederzeit in der App löschen
 • Open Source: Jeder kann den Quellcode lesen

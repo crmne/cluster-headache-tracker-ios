@@ -1,4 +1,4 @@
-Cluster Headache Tracker is a free diary for people with cluster headaches. Accounts use a username and password only (no email address), so the demo account above is all you need. It holds made-up data: a cluster period of the last four weeks.
+Cluster Headache Tracker is a free diary for people with cluster headaches. Accounts use a username and password only (no email address), so the demo account above is all you need. It holds made-up data: a cluster period of the last four weeks. New accounts must tick a box consenting to the processing of their health data (GDPR Art. 9); the demo account has already consented.
 
 Native features to try:
 - New (tab bar) or the "Log attack" Home Screen quick action opens the new attack form.
