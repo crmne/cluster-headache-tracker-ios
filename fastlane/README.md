@@ -22,8 +22,19 @@ Connect by hand if you prefer.
    `bin/kamal app exec -i --reuse "bin/rails demo:reset"`, and give it the
    password stored in App Store Connect (the account is `appreview`). Reviewers
    may delete it, which is fine: resetting recreates it.
-2. Archive with `Scripts/archive-release.sh vX.Y.Z` and upload from Xcode's
-   Organizer.
+2. Tag `vX.Y.Z` on main and push the tag. Xcode Cloud's "Release" workflow
+   (any tag) archives it and uploads it to App Store Connect, where it shows up
+   in TestFlight; pushing to main runs the "Development" workflow, which only
+   archives. Xcode Cloud sets the build number. By hand instead:
+   `Scripts/archive-release.sh vX.Y.Z` and upload from Xcode's Organizer.
+
+Xcode Cloud signs automatically but can't change App IDs, so the developer
+portal must already have both App IDs ("Cluster Headache Tracker",
+`me.paolino.Cluster-Headache-Tracker`, and "Cluster Headache Tracker Widgets",
+`.Widgets`) with App Groups on and `group.me.paolino.Cluster-Headache-Tracker`
+assigned. A new capability in the entitlements means enabling it there first.
+Name identifiers, keys and profiles "Cluster Headache Tracker" (plus "Staging"
+or "Dev"), never Xcode's generated "XC ..." names.
 
 ## App information
 
@@ -35,6 +46,8 @@ Connect by hand if you prefer.
   https://clusterheadachetracker.com/cluster-headache-app. Privacy policy:
   https://clusterheadachetracker.com/privacy-policy.
 - Copyright: 2026 Carmine Paolino.
+- Regulated medical device (App Information, required for the EU/EEA, UK
+  and US): No. It's a diary that measures, diagnoses and recommends nothing.
 - Export compliance: answered in the build (`ITSAppUsesNonExemptEncryption`
   is false: only the system's HTTPS).
 - Content rights: the app shows no third-party content.
@@ -51,7 +64,7 @@ advertising. Answer "Yes, we collect data" and declare:
 | User Content › Other User Content | Yes | No | App Functionality, Other (product feedback) | Free-text notes, feedback survey answers |
 | Identifiers › User ID | Yes | No | App Functionality | The username |
 | Usage Data › Product Interaction | No | No | Analytics | Page views counted by our self-hosted Plausible, without cookies or stored IP addresses |
-| Diagnostics › Other Diagnostic Data | Yes | No | App Functionality | Server error reports to our self-hosted Bugsink, naming the account by number |
+| Diagnostics › Other Diagnostic Data | Yes | No | App Functionality | Server error reports to our self-hosted Bugsink: the failed request, the account number and username; a failed save can include its health details |
 
 Not collected: contact info (no email, name or phone), location, financial
 info, contacts, browsing or search history, purchases, sensitive info beyond
@@ -84,7 +97,7 @@ infrequent, and accept the rating App Store Connect computes.
 - 5.1.1(v): accounts can be deleted in the app (Account › Delete account).
 - 5.1.1(ix): apps in highly regulated fields such as healthcare, or that need
   sensitive data, should come from a legal entity rather than an individual.
-  This app provides no healthcare service, but if review raises it, submit
-  from an organization account.
+  The developer account is an organization (PlentyLabs UG (haftungsbeschränkt)
+  & Co. KG, team JPL7999US3), so this is covered.
 - 3.1.1: the GitHub Sponsors links are hidden in the app (the server leaves
   them out for every iOS build); donations would have to use In-App Purchase.
