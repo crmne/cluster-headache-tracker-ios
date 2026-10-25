@@ -2,6 +2,7 @@
 import Foundation
 import Testing
 import UIKit
+import WebKit
 
 @MainActor
 struct NativeShellTests {
@@ -29,6 +30,12 @@ struct NativeShellTests {
         #expect(WebViewFactory.pageZoom(for: .extraSmall) < 1)
         #expect(WebViewFactory.pageZoom(for: .extraExtraExtraLarge) > WebViewFactory.pageZoom(for: .extraLarge))
         #expect(WebViewFactory.pageZoom(for: .accessibilityExtraExtraExtraLarge) == 1.2)
+    }
+
+    @Test @MainActor func webViewsSkipLinkPreviewsAndFollowTheirTitle() {
+        let webView = WebViewFactory.makeWebView(configuration: WKWebViewConfiguration())
+        #expect(!webView.allowsLinkPreview)
+        #expect(webView.scrollView.keyboardDismissMode == .interactive)
     }
 
     @Test func tabsCoverTheSignedInWebNavigation() {
